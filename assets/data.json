@@ -1,0 +1,25 @@
+{
+    "assets": [
+        "assets/sprites/player_idle.png",
+        "assets/sprites/player_walk.png",
+        
+        "assets/tilesets/indoors.png",
+        
+        "assets/maps/test.json"
+    ],
+    "tilesets": [
+        {
+            "name":"indoors",
+            "file":"assets/tilesets/indoors.png",
+            "width":8,
+            "height":4
+        }
+    ],
+    "maps": [
+        {
+            "name":"kitchen",
+            "file":"assets/maps/test.json",
+            "tileset":"indoors"
+        }
+    ]
+}
