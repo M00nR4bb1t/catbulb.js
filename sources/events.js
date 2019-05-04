@@ -15,6 +15,7 @@ Events.Message = class extends Events.BaseEvent {
         this.width = Math.ceil(width / 5 * 3);
         this.height = Math.ceil(height / 3);
         this.time = 0;
+        this.reveal = 0;
         this.waning = false;
 
         this.container = new PIXI.Container();
@@ -43,6 +44,7 @@ Events.Message = class extends Events.BaseEvent {
         this.container.y = height;
         this.time = 0;
         this.waning = false;
+        this.reveal = 0;
         this.bitmapText.text = '';
         app.stage.addChild(this.container);
     }
@@ -57,7 +59,11 @@ Events.Message = class extends Events.BaseEvent {
             this.time -= delta;
         } else {
             if (this.time % 2 < 1 && this.bitmapText.text != this.args.message) {
-                this.bitmapText.text = this.args.message.substr(0, Math.floor(this.time / 2));
+                this.reveal++;
+                if (this.args.message.charAt(this.reveal - 1) == '§') {
+                    this.reveal += this.args.message.substr(this.reveal).match(/{.*?}/g)[0].length;
+                }
+                this.bitmapText.text = this.args.message.substr(0, this.reveal);
             }
             
             if (this.time > 0 && keyPressed.KeyZ) {

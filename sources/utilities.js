@@ -17,25 +17,38 @@ class BitmapText extends PIXI.Graphics {
         this.text = text;
         this.wrapWidth = wrapWidth;
         this.redraw();
-        console.log(this);
     }
 
     redraw() {
         this.clear();
         var x = 0, y = 0;
+        var shake = 0, tint = 0xffffff;
         var charWidth = fonts.ascii[0].width, charHeight = fonts.ascii[0].height;
         for (var i=0; i<this.text.length; i++) {
             var charCode = this.text.charCodeAt(i);
-            if (charCode < 128) {
-                if (x + charWidth > this.wrapWidth) {
+            if (charCode == 167 && this.text.length > i + 1 && this.text.charCodeAt(i + 1) == 123) {
+                var JSONString = this.text.substr(i + 1).match(/{.*?}/g)[0];
+                var JSONData = JSON.parse(JSONString);
+                
+                if (JSONData.shake != undefined) {
+                    shake = JSONData.shake;
+                }
+                if (JSONData.tint != undefined) {
+                    tint = JSONData.tint;
+                }
+
+                i += JSONString.length;
+                continue;
+            } else if (charCode < 128) {
+                var nextWord = this.text.substr(i).match(/ .*?(?=(?: |$))/g);
+                if (x + charWidth > this.wrapWidth || (charCode == 32 && nextWord != null && x + charWidth * nextWord[0].length > this.wrapWidth)) {
                     y += charHeight;
                     x = 0;
-                    if (charCode == 32) {
-                        continue;
-                    }
+                    continue;
                 }
-                this.beginTextureFill(fonts.ascii[charCode]);
-                this.drawRect(x, y, charWidth, charHeight);
+                var shakeOffset = Math.round((Math.sin(Date.now() / 100 + i) - 0.5) * shake);
+                this.beginTextureFill(fonts.ascii[charCode], tint, 1, new PIXI.Matrix(1, 0, 0, 1, 0, shakeOffset));
+                this.drawRect(x, y + shakeOffset, charWidth, charHeight);
                 this.endFill();
                 x += charWidth;
             }

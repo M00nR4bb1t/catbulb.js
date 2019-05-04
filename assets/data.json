@@ -39,7 +39,7 @@
         ],
         "stove": [
             {"type":"Message", "arguments":{"message":"A gas stove."}},
-            {"type":"Message", "arguments":{"message":"...it seems to be broken."}}
+            {"type":"Message", "arguments":{"message":"§{\"shake\":2, \"tint\":16711680}Ouch!§{\"shake\":0, \"tint\":16777215} It's still hot."}}
         ]
     }
 }
