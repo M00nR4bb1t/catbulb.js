@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="15" height="9" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="38">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="15" height="9" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="44">
  <tileset firstgid="1" name="indoors" tilewidth="16" tileheight="16" tilecount="32" columns="8">
   <image source="../tilesets/indoors.png" width="128" height="64"/>
  </tileset>
@@ -31,7 +31,6 @@
  </layer>
  <objectgroup id="3" name="Object Layer 1">
   <object id="2" name="doorOut" type="trigger,autoTrigger" x="48" y="80" width="16" height="16"/>
-  <object id="3" name="kitchenCounter" type="trigger,solid" x="80" y="48" width="79.875" height="11"/>
   <object id="19" x="48" y="32" width="16" height="48"/>
   <object id="20" x="64" y="32" width="112" height="16"/>
   <object id="21" x="176" y="48" width="16" height="64"/>
@@ -41,5 +40,9 @@
   <object id="33" x="160" y="88" width="11" height="16"/>
   <object id="34" x="147" y="88" width="9" height="18"/>
   <object id="37" x="32.0331" y="80.1618" width="16" height="16"/>
+  <object id="40" x="96" y="48" width="16" height="11"/>
+  <object id="41" x="128" y="48" width="32" height="11"/>
+  <object id="42" name="sink" type="trigger,solid" x="80" y="48" width="16" height="11"/>
+  <object id="43" name="stove" type="trigger,solid" x="112" y="48" width="16" height="11"/>
  </objectgroup>
 </map>

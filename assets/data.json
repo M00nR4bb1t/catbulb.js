@@ -33,8 +33,13 @@
         "doorOut": [
             {"type":"Message", "arguments":{"message":"No need to go out just yet."}}
         ],
-        "kitchenCounter": [
-            {"type":"Message", "arguments":{"message":"Kitchen counter."}}
+        "sink": [
+            {"type":"Message", "arguments":{"message":"A kitchen sink."}},
+            {"type":"Message", "arguments":{"message":"...the basin does not seem to work."}}
+        ],
+        "stove": [
+            {"type":"Message", "arguments":{"message":"A gas stove."}},
+            {"type":"Message", "arguments":{"message":"...it seems to be broken."}}
         ]
     }
 }

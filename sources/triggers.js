@@ -17,7 +17,7 @@ class EventPlayer {
             this.index = 0;
             this.playing = false;
         } else {
-            events[this.index].play(this);
+            this.events[this.index].play(this);
         }
     }
 
