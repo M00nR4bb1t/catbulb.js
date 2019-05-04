@@ -1,5 +1,7 @@
 {
     "assets": [
+        "assets/gui/font_ascii.png",
+
         "assets/sprites/player_idle.png",
         "assets/sprites/player_walk.png",
         
@@ -7,6 +9,11 @@
         
         "assets/maps/test.json"
     ],
+    "gui": {
+        "fonts": {
+            "ascii": "assets/gui/font_ascii.png"
+        }
+    },
     "tilesets": [
         {
             "name":"indoors",
@@ -21,5 +28,13 @@
             "file":"assets/maps/test.json",
             "tileset":"indoors"
         }
-    ]
+    ],
+    "events": {
+        "doorOut": [
+            {"type":"Message", "arguments":{"message":"No need to go out just yet."}}
+        ],
+        "kitchenCounter": [
+            {"type":"Message", "arguments":{"message":"Kitchen counter."}}
+        ]
+    }
 }

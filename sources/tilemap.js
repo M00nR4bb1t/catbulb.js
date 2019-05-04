@@ -1,6 +1,7 @@
 class TileMap {
-    constructor(data, width, height, tileset, solids) {
+    constructor(data, width, height, tileset, solids, triggers) {
         this.solids = solids;
+        this.triggers = triggers;
 
         this.graphics = new PIXI.Graphics();
         for (var k=0; k<data.length; k++) {
@@ -18,10 +19,12 @@ class TileMap {
     addTo(container) {
         container.addChild(this.graphics);
         solids = this.solids;
+        triggers = this.triggers;
     }
 
     remove() {
         this.graphics.parent.removeChild(this.graphics);
         solids = [];
+        triggers = [];
     }
 }

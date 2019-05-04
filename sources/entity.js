@@ -6,8 +6,11 @@ class Entity {
         this.container = new PIXI.Container();
     }
 
-    update(delta) {
+    move(delta) {
         this.pos.add(this.vel.clone().scale(delta, delta));
+    }
+
+    resolveCollisions() {
         if (this.mask != null) {
             this.mask.pos = this.pos;
             var response = new SAT.Response();
@@ -18,8 +21,17 @@ class Entity {
                 response.clear();
             }
         }
+    }
+
+    updateContainerPosition() {
         this.container.x = Math.floor(this.pos.x);
         this.container.y = Math.floor(this.pos.y);
+    }
+
+    update(delta) {
+        this.move(delta);
+        this.resolveCollisions();
+        this.updateContainerPosition();
     }
 
     addTo(container) {

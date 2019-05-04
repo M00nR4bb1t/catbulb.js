@@ -19,14 +19,38 @@ class Player extends Entity {
         ]);
         
         this.speed = 1.25;
+        this.searched = new Map();
     }
 
     update(delta) {
-        this.vel.x = (isKeyDown.ArrowRight? 1:0) - (isKeyDown.ArrowLeft? 1:0);
-        this.vel.y = (isKeyDown.ArrowDown? 1:0) - (isKeyDown.ArrowUp? 1:0);
+        this.vel.x = (keyDown.ArrowRight? 1:0) - (keyDown.ArrowLeft? 1:0);
+        this.vel.y = (keyDown.ArrowDown? 1:0) - (keyDown.ArrowUp? 1:0);
         
         if (this.vel.len() > 0) {
             this.vel.normalize().scale(this.speed, this.speed);
+        }
+
+        var xPrev = this.pos.x, yPrev = this.pos.y;
+
+        this.move(delta);
+
+        this.mask.pos = this.pos;
+        var response = new SAT.Response();
+        for (var i=0; i<triggers.length; i++) {
+            if (SAT.testPolygonPolygon(this.mask, triggers[i].mask, response)) {
+                if (!triggers[i].isPlaying() && !this.searched.get(triggers[i]) && response.overlap > 0 && (triggers[i].autoTrigger || keyPressed.KeyZ)) {
+                    triggers[i].play();
+                    if (triggers[i].autoTrigger) this.searched.set(triggers[i], true);
+                }
+            } else if (this.searched.get(triggers[i])) {
+                this.searched.set(triggers[i], false);
+            }
+            response.clear();
+        }
+
+        this.resolveCollisions();
+
+        if (this.pos.x != xPrev || this.pos.y != yPrev) {
             if (this.sprite.textures != this.walkAnim) {
                 this.sprite.textures = this.walkAnim;
                 this.sprite.animationSpeed = 0.15;
@@ -41,6 +65,6 @@ class Player extends Entity {
             this.sprite.gotoAndPlay(0);
         }
 
-        super.update(delta);
+        this.updateContainerPosition();
     }
 }
