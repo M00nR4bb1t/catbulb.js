@@ -31,158 +31,158 @@
          "name":"Object Layer 1",
          "objects":[
                 {
-                 "height":16,
+                 "height":32,
                  "id":2,
                  "name":"doorOut",
                  "rotation":0,
                  "type":"trigger,autoTrigger",
                  "visible":true,
-                 "width":16,
-                 "x":48,
-                 "y":80
+                 "width":32,
+                 "x":96,
+                 "y":160
                 }, 
                 {
-                 "height":48,
+                 "height":96,
                  "id":19,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":16,
-                 "x":48,
-                 "y":32
+                 "width":32,
+                 "x":96,
+                 "y":64
                 }, 
                 {
-                 "height":16,
+                 "height":32,
                  "id":20,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":112,
-                 "x":64,
-                 "y":32
+                 "width":224,
+                 "x":128,
+                 "y":64
                 }, 
                 {
-                 "height":64,
+                 "height":128,
                  "id":21,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":16,
-                 "x":176,
-                 "y":48
+                 "width":32,
+                 "x":352,
+                 "y":96
                 }, 
                 {
-                 "height":32,
+                 "height":64,
                  "id":22,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":16,
-                 "x":48,
-                 "y":96
+                 "width":32,
+                 "x":96,
+                 "y":192
                 }, 
                 {
-                 "height":16,
+                 "height":32,
                  "id":23,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":112,
-                 "x":64,
-                 "y":112
+                 "width":224,
+                 "x":128,
+                 "y":224
                 }, 
                 {
-                 "height":23,
+                 "height":46,
                  "id":32,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":14,
-                 "x":152,
-                 "y":84
+                 "width":28,
+                 "x":304,
+                 "y":168
                 }, 
                 {
-                 "height":16,
+                 "height":32,
                  "id":33,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":11,
-                 "x":160,
-                 "y":88
+                 "width":22,
+                 "x":320,
+                 "y":176
                 }, 
                 {
-                 "height":18,
+                 "height":36,
                  "id":34,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":9,
-                 "x":147,
-                 "y":88
+                 "width":18,
+                 "x":294,
+                 "y":176
                 }, 
                 {
-                 "height":16,
+                 "height":32,
                  "id":37,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":16,
-                 "x":32.0331362521625,
-                 "y":80.1618030075474
+                 "width":32,
+                 "x":64,
+                 "y":160
                 }, 
                 {
-                 "height":11,
+                 "height":22,
                  "id":40,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":16,
-                 "x":96,
-                 "y":48
+                 "width":32,
+                 "x":192,
+                 "y":96
                 }, 
                 {
-                 "height":11,
+                 "height":22,
                  "id":41,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":32,
-                 "x":128,
-                 "y":48
+                 "width":64,
+                 "x":256,
+                 "y":96
                 }, 
                 {
-                 "height":11,
+                 "height":22,
                  "id":42,
                  "name":"sink",
                  "rotation":0,
                  "type":"trigger,solid",
                  "visible":true,
-                 "width":16,
-                 "x":80,
-                 "y":48
+                 "width":32,
+                 "x":160,
+                 "y":96
                 }, 
                 {
-                 "height":11,
+                 "height":22,
                  "id":43,
                  "name":"stove",
                  "rotation":0,
                  "type":"trigger,solid",
                  "visible":true,
-                 "width":16,
-                 "x":112,
-                 "y":48
+                 "width":32,
+                 "x":224,
+                 "y":96
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -195,22 +195,22 @@
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.2.2",
- "tileheight":16,
+ "tileheight":32,
  "tilesets":[
         {
          "columns":8,
          "firstgid":1,
          "image":"..\/tilesets\/indoors.png",
-         "imageheight":64,
-         "imagewidth":128,
+         "imageheight":128,
+         "imagewidth":256,
          "margin":0,
          "name":"indoors",
          "spacing":0,
          "tilecount":32,
-         "tileheight":16,
-         "tilewidth":16
+         "tileheight":32,
+         "tilewidth":32
         }],
- "tilewidth":16,
+ "tilewidth":32,
  "type":"map",
  "version":1.2,
  "width":15

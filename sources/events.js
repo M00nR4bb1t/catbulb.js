@@ -29,12 +29,12 @@ Events.Message = class extends Events.BaseEvent {
         this.graphics.endFill();
 
         this.graphics.beginFill(0x004d4d);
-        this.graphics.drawRect(1, 1, this.width - 2, this.height - 2);
+        this.graphics.drawRect(2, 2, this.width - 4, this.height - 4);
         this.graphics.endFill();
 
-        this.bitmapText = new BitmapText('', this.width - 6);
-        this.bitmapText.x = Math.floor(-this.width / 2 + 3);
-        this.bitmapText.y = 3;
+        this.bitmapText = new BitmapText('', this.width - 12);
+        this.bitmapText.x = Math.floor(-this.width / 2 + 6);
+        this.bitmapText.y = 6;
         this.container.addChild(this.bitmapText);
     }
 

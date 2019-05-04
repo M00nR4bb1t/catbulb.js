@@ -1,8 +1,8 @@
 /**
  * Constants
  */
-var width = 240, height = 135; // The size of the Application
-var gridWidth = 16, gridHeight = 16; // The width and height of the grid
+var width = 480, height = 270; // The size of the Application
+var gridWidth = 32, gridHeight = 32; // The width and height of the grid
 
 /**
  * Create the Application
@@ -38,7 +38,7 @@ var player;
 
 var keyDown = {}, keyPressed = {}, keyReleased = {};
 
-function init(loader, resources) {    
+function init(loader, resources) {
     if (dataJSON.gui.fonts.ascii) fonts.ascii = Spritesheet.cut(resources[dataJSON.gui.fonts.ascii].texture, 16, 8);
 
     for (var i=0; i<dataJSON.tilesets.length; i++) {
@@ -83,9 +83,8 @@ function init(loader, resources) {
     
     maps['kitchen'].addTo(app.stage);
     
-    player = new Player(new SAT.V(112, 80), Spritesheet.cut(resources['assets/sprites/player_idle.png'].texture, 2, 1), Spritesheet.cut(resources['assets/sprites/player_walk.png'].texture, 4, 1));
+    player = new Player(new SAT.V(224, 160), Spritesheet.cut(resources['assets/sprites/player_idle.png'].texture, 2, 1), Spritesheet.cut(resources['assets/sprites/player_walk.png'].texture, 4, 1));
     player.addTo(app.stage);
-    
 
     document.addEventListener('keydown', e => onKeyDown(e.code));
     document.addEventListener('keyup', e => onKeyUp(e.code));

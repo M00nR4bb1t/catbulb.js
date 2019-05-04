@@ -12,13 +12,13 @@ class Player extends Entity {
         this.container.addChild(this.sprite);
 
         this.mask = new SAT.Polygon(new SAT.V(0, 0), [
-            new SAT.V(-8, -8),
-            new SAT.V(8, -8),
-            new SAT.V(8, 0),
-            new SAT.V(-8, 0)
+            new SAT.V(-16, -16),
+            new SAT.V(16, -16),
+            new SAT.V(16, 0),
+            new SAT.V(-16, 0)
         ]);
         
-        this.speed = 1.25;
+        this.speed = 2.5;
         this.searched = new Map();
     }
 
