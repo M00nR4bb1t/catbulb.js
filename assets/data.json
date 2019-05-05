@@ -1,6 +1,7 @@
 {
     "assets": [
         "assets/gui/font_ascii.png",
+        "assets/gui/font_kr.png",
 
         "assets/sprites/player_idle.png",
         "assets/sprites/player_walk.png",
@@ -11,7 +12,8 @@
     ],
     "gui": {
         "fonts": {
-            "ascii": "assets/gui/font_ascii.png"
+            "ascii": "assets/gui/font_ascii.png",
+            "kr": "assets/gui/font_kr.png"
         }
     },
     "tilesets": [
@@ -31,15 +33,19 @@
     ],
     "events": {
         "doorOut": [
-            {"type":"Message", "arguments":{"message":"No need to go out just yet."}}
+            {"type":"Message", "arguments":{"message":"아직은 나갈 필요가 없다."}}
         ],
         "sink": [
-            {"type":"Message", "arguments":{"message":"A kitchen sink."}},
-            {"type":"Message", "arguments":{"message":"...the basin does not seem to work."}}
+            {"type":"Message", "arguments":{"message":"싱크대이다."}},
+            {"type":"Message", "arguments":{"message":"...물은 나오지 않는 것 같다."}}
         ],
         "stove": [
-            {"type":"Message", "arguments":{"message":"A gas stove."}},
-            {"type":"Message", "arguments":{"message":"§{\"shake\":2, \"tint\":16711680}Ouch!§{\"shake\":0, \"tint\":16777215} It's still hot."}}
+            {"type":"Message", "arguments":{"message":"가스레인지이다."}},
+            {"type":"Message", "arguments":{"message":"§{\"shake\":1, \"tint\":16711680}아야!§{\"shake\":0, \"tint\":16777215} 최근에 누군가 썼는지, 뜨겁다."}}
+        ],
+        "kitchenHole": [
+            {"type":"Message", "arguments":{"message":"직경 2미터 정도의 커다란 구멍이다."}},
+            {"type":"Message", "arguments":{"message":"§{\"shake\":3}...히익!§{\"shake\":0} 거의 떨어질 뻔 했잖아!"}}
         ]
     }
 }

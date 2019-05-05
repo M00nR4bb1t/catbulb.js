@@ -40,6 +40,7 @@ var keyDown = {}, keyPressed = {}, keyReleased = {};
 
 function init(loader, resources) {
     if (dataJSON.gui.fonts.ascii) fonts.ascii = Spritesheet.cut(resources[dataJSON.gui.fonts.ascii].texture, 16, 8);
+    if (dataJSON.gui.fonts.kr) fonts.kr = Spritesheet.cut(resources[dataJSON.gui.fonts.kr].texture, 32, 16);
 
     for (var i=0; i<dataJSON.tilesets.length; i++) {
         tilesets[dataJSON.tilesets[i].name] = Spritesheet.cut(resources[dataJSON.tilesets[i].file].texture, dataJSON.tilesets[i].width, dataJSON.tilesets[i].height);
