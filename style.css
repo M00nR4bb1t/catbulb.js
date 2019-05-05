@@ -10,6 +10,7 @@ canvas {
     width: auto;
     height: 100vh;
     image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
 
     position: absolute;
     left: 50vw;

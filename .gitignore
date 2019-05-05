@@ -1,5 +1,4 @@
-*.png~
-*.kra~
+*~
 *-autosave.kra
 
 # OS generated files #

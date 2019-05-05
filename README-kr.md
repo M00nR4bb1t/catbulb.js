@@ -1,8 +1,8 @@
-# catbulb.js
+# catbulb.js ![icon](_favicon.ico)
 *[English](https://github.com/M00nR4bb1t/catbulb.js/blob/master/README.md) / 한국어*
 
 ## 목차
-- [catbulb.js](#catbulbjs)
+- [catbulb.js](#catbulbjs-icon)
   - [목차](#%EB%AA%A9%EC%B0%A8)
   - [설치](#%EC%84%A4%EC%B9%98)
     - [빠른 설치](#%EB%B9%A0%EB%A5%B8-%EC%84%A4%EC%B9%98)

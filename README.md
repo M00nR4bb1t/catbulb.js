@@ -1,8 +1,8 @@
-# catbulb.js
+# catbulb.js ![icon](_favicon.ico)
 *English / [한국어](https://github.com/M00nR4bb1t/catbulb.js/blob/master/README-kr.md)*
 
 ## Table of Contents
-- [catbulb.js](#catbulbjs)
+- [catbulb.js](#catbulbjs-icon)
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
     - [Quick Setup](#quick-setup)
