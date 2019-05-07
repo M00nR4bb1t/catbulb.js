@@ -33,8 +33,14 @@ new PIXI.Loader()
  */
 var fonts = {};
 var tilesets = {}, maps = {};
-var solids = [], triggers = [];
+var map, solids = [], triggers = [];
+var needsUpdate = [];
 var player;
+
+var viewport = new PIXI.Container();
+app.stage.addChild(viewport);
+var gui = new PIXI.Container();
+app.stage.addChild(gui);
 
 var keyDown = {}, keyPressed = {}, keyReleased = {};
 
@@ -49,7 +55,7 @@ function init(loader, resources) {
     for (var i=0; i<dataJSON.maps.length; i++) {
         var mapJSON = resources[dataJSON.maps[i].file].data;
         var tileLayers = [];
-        var solids = [];
+        var _solids = [], _triggers = [];
         for (var j=0; j<mapJSON.layers.length; j++) {
             if (mapJSON.layers[j].type == 'tilelayer') {
                 tileLayers.push(mapJSON.layers[j].data);
@@ -59,7 +65,7 @@ function init(loader, resources) {
                     if (type != "") types = type.split(/ *, */g);
                     
                     if (types.length == 0 || types.indexOf('solid') != -1) {
-                        solids.push(new SAT.Box(new SAT.V(mapJSON.layers[j].objects[k].x, mapJSON.layers[j].objects[k].y), mapJSON.layers[j].objects[k].width, mapJSON.layers[j].objects[k].height).toPolygon());
+                        _solids.push(new SAT.Box(new SAT.V(mapJSON.layers[j].objects[k].x, mapJSON.layers[j].objects[k].y), mapJSON.layers[j].objects[k].width, mapJSON.layers[j].objects[k].height).toPolygon());
                     }
                     
                     if (types.indexOf('trigger') != -1) {
@@ -68,7 +74,7 @@ function init(loader, resources) {
                         for (var l=0; l<eventsData.length; l++) {
                             events[l] = new Events[eventsData[l].type](eventsData[l].arguments);
                         }
-                        triggers.push(new Trigger(
+                        _triggers.push(new Trigger(
                                 new SAT.V(mapJSON.layers[j].objects[k].x, mapJSON.layers[j].objects[k].y),
                                 new SAT.Box(new SAT.V(0, 0), mapJSON.layers[j].objects[k].width, mapJSON.layers[j].objects[k].height).toPolygon(),
                                 events,
@@ -79,13 +85,13 @@ function init(loader, resources) {
                 } 
             }
         }
-        maps[dataJSON.maps[i].name] = new TileMap(tileLayers, mapJSON.width, mapJSON.height, tilesets[dataJSON.maps[i].tileset], solids, triggers);
+        maps[dataJSON.maps[i].name] = new TileMap(dataJSON.maps[i].hasOwnProperty('displayName')? dataJSON.maps[i].displayName:dataJSON.maps[i].name, tileLayers, mapJSON.width, mapJSON.height, tilesets[dataJSON.maps[i].tileset], _solids, _triggers);
     }
     
-    maps['kitchen'].addTo(app.stage);
+    (map = maps['kitchen']).addTo(viewport);
     
     player = new Player(new SAT.V(224, 160), Spritesheet.cut(resources['assets/sprites/player_idle.png'].texture, 2, 1), Spritesheet.cut(resources['assets/sprites/player_walk.png'].texture, 4, 1));
-    player.addTo(app.stage);
+    player.addTo(viewport);
 
     document.addEventListener('keydown', e => onKeyDown(e.code));
     document.addEventListener('keyup', e => onKeyUp(e.code));
@@ -95,11 +101,20 @@ function init(loader, resources) {
 function update(delta) {
     player.update(delta);
     for (var i in triggers) {
-      triggers[i].update(delta);
+        triggers[i].update(delta);
+    }
+    for (var i in needsUpdate) {
+        needsUpdate[i].update(delta);
     }
 
     for (var key in keyPressed) {keyPressed[key] = false;}
     for (var key in keyReleased) {keyReleased[key] = false;}
+
+    viewport.children.sort(zSort);
+}
+
+function zSort(a, b) {
+    return a.z - b.z;
 }
 
 function onKeyDown(code) {

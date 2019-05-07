@@ -37,7 +37,7 @@
                  "rotation":0,
                  "type":"trigger,autoTrigger",
                  "visible":true,
-                 "width":32,
+                 "width":1,
                  "x":96,
                  "y":160
                 }, 

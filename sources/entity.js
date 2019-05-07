@@ -25,7 +25,7 @@ class Entity {
 
     updateContainerPosition() {
         this.container.x = Math.floor(this.pos.x);
-        this.container.y = Math.floor(this.pos.y);
+        this.container.y = this.container.z = Math.floor(this.pos.y);
     }
 
     update(delta) {

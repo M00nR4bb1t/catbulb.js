@@ -8,12 +8,13 @@
         
         "assets/tilesets/indoors.png",
         
-        "assets/maps/test.json"
+        "assets/maps/test.json",
+        "assets/maps/livingRoom.json"
     ],
     "gui": {
         "fonts": {
-            "ascii": "assets/gui/font_ascii.png",
-            "kr": "assets/gui/font_kr.png"
+            "ascii":"assets/gui/font_ascii.png",
+            "kr":"assets/gui/font_kr.png"
         }
     },
     "tilesets": [
@@ -21,31 +22,49 @@
             "name":"indoors",
             "file":"assets/tilesets/indoors.png",
             "width":8,
-            "height":4
+            "height":8
         }
     ],
     "maps": [
         {
+            "displayName":"Kitchen",
             "name":"kitchen",
             "file":"assets/maps/test.json",
+            "tileset":"indoors"
+        },
+        {
+            "displayName":"Living Room",
+            "name":"livingRoom",
+            "file":"assets/maps/livingRoom.json",
             "tileset":"indoors"
         }
     ],
     "events": {
         "doorOut": [
-            {"type":"Message", "arguments":{"message":"아직은 나갈 필요가 없다."}}
+            {"type":"MapChange", "arguments":{"map":"livingRoom", "x":368}}
+        ],
+        "doorToKitchen": [
+            {"type":"MapChange", "arguments":{"map":"kitchen", "x":112}}
         ],
         "sink": [
-            {"type":"Message", "arguments":{"message":"싱크대이다."}},
-            {"type":"Message", "arguments":{"message":"...물은 나오지 않는 것 같다."}}
+            {"type":"Message", "arguments":{"message":"A kitchen sink."}},
+            {"type":"Message", "arguments":{"message":"...the faucet doesn't seem to work."}}
         ],
         "stove": [
-            {"type":"Message", "arguments":{"message":"가스레인지이다."}},
-            {"type":"Message", "arguments":{"message":"§{\"shake\":1, \"tint\":16711680}아야!§{\"shake\":0, \"tint\":16777215} 최근에 누군가 썼는지, 뜨겁다."}}
+            {"type":"Message", "arguments":{"message":"A gas stove."}},
+            {"type":"Message", "arguments":{"message":"§{\"shake\":1, \"tint\":16711680}Ow!§{\"shake\":0, \"tint\":16777215} It's still hot."}}
         ],
         "kitchenHole": [
-            {"type":"Message", "arguments":{"message":"직경 2미터 정도의 커다란 구멍이다."}},
-            {"type":"Message", "arguments":{"message":"§{\"shake\":3}...히익!§{\"shake\":0} 거의 떨어질 뻔 했잖아!"}}
+            {"type":"Message", "arguments":{"message":"A big hole, around 2 meters in diameter."}},
+            {"type":"Message", "arguments":{"message":"§{\"shake\":3}...Woah!§{\"shake\":0} I almost fell down through the hole!"}}
+        ],
+        "fireplace": [
+            {"type":"Message", "arguments":{"message":"A wood-burning fireplace."}},
+            {"type":"Message", "arguments":{"message":"I can hear the firewood crackle."}}
+        ],
+        "sofa": [
+            {"type":"Message", "arguments":{"message":"A couch."}},
+            {"type":"Message", "arguments":{"message":"Looks cozy."}}
         ]
     }
 }

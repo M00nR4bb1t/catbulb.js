@@ -39,9 +39,8 @@ class BitmapText extends PIXI.Graphics {
                 i += JSONString.length;
                 continue;
             } else if (charCode < 128) {
-                var nextWord = this.text.substr(i).match(/ .*?(?=(?: |$))/g);
                 var charWidth = fonts.ascii[0].width, charHeight = fonts.ascii[0].height;
-                if (nextWord != null) console.log(nextWord, charCode == 32, nextWord != null, x + charWidth * nextWord[0].length > this.wrapWidth);
+                var nextWord = this.text.substr(i).match(/ .*?(?=(?: |$))/g);
                 if (charCode == 32 && nextWord != null && x + charWidth * nextWord[0].length > this.wrapWidth) {
                     y += charHeight;
                     x = 0;
@@ -53,9 +52,9 @@ class BitmapText extends PIXI.Graphics {
                 this.endFill();
                 x += charWidth;
             } else if (charCode >= 0xac00 && charCode <= 0xd7a3) {
-                var nextWord = this.text.substr(i).match(/ .*?(?=(?: |$))/g);
                 var charWidth = fonts.kr[0].width, charHeight = fonts.kr[0].height;
-
+                var nextWord = this.text.substr(i).match(/ .*?(?=(?: |$))/g);
+                
                 var _charCode = charCode - 0xac00;
                 var jong = _charCode % 28;
                 var jung = ((_charCode - jong) / 28 ) % 21;

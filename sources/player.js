@@ -37,8 +37,8 @@ class Player extends Entity {
         this.mask.pos = this.pos;
         var response = new SAT.Response();
         for (var i=0; i<triggers.length; i++) {
-            if (SAT.testPolygonPolygon(this.mask, triggers[i].mask, response)) {
-                if (!triggers[i].isPlaying() && !this.searched.get(triggers[i]) && response.overlap > 0 && (triggers[i].autoTrigger || keyPressed.KeyZ)) {
+            if (SAT.testPolygonPolygon(this.mask, triggers[i].mask, response) && response.overlap > 0) {
+                if (!triggers[i].isPlaying() && !this.searched.get(triggers[i]) && (triggers[i].autoTrigger || keyPressed.KeyZ)) {
                     triggers[i].play();
                     if (triggers[i].autoTrigger) this.searched.set(triggers[i], true);
                 }
