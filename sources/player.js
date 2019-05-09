@@ -19,33 +19,37 @@ class Player extends Entity {
         ]);
         
         this.speed = 2.5;
+        this.paralyzed = false;
         this.searched = new Map();
     }
 
     update(delta) {
-        this.vel.x = (keyDown.ArrowRight? 1:0) - (keyDown.ArrowLeft? 1:0);
-        this.vel.y = (keyDown.ArrowDown? 1:0) - (keyDown.ArrowUp? 1:0);
-        
-        if (this.vel.len() > 0) {
-            this.vel.normalize().scale(this.speed, this.speed);
+        if (!this.paralyzed) {
+            this.vel.x = (keyDown.ArrowRight? 1:0) - (keyDown.ArrowLeft? 1:0);
+            this.vel.y = (keyDown.ArrowDown? 1:0) - (keyDown.ArrowUp? 1:0);
+            
+            if (this.vel.len() > 0) {
+                this.vel.normalize().scale(this.speed, this.speed);
+            }
         }
 
         var xPrev = this.pos.x, yPrev = this.pos.y;
-
         this.move(delta);
 
-        this.mask.pos = this.pos;
-        var response = new SAT.Response();
-        for (var i=0; i<triggers.length; i++) {
-            if (SAT.testPolygonPolygon(this.mask, triggers[i].mask, response) && response.overlap > 0) {
-                if (!triggers[i].isPlaying() && !this.searched.get(triggers[i]) && (triggers[i].autoTrigger || keyPressed.KeyZ)) {
-                    triggers[i].play();
-                    if (triggers[i].autoTrigger) this.searched.set(triggers[i], true);
+        if (!this.paralyzed) {
+            this.mask.pos = this.pos;
+            var response = new SAT.Response();
+            for (var i=0; i<triggers.length; i++) {
+                if (SAT.testPolygonPolygon(this.mask, triggers[i].mask, response) && response.overlap > 0) {
+                    if (!triggers[i].isPlaying() && !this.searched.get(triggers[i]) && (triggers[i].autoTrigger || keyPressed.KeyZ)) {
+                        triggers[i].play();
+                        if (triggers[i].autoTrigger) this.searched.set(triggers[i], true);
+                    }
+                } else if (this.searched.get(triggers[i])) {
+                    this.searched.set(triggers[i], false);
                 }
-            } else if (this.searched.get(triggers[i])) {
-                this.searched.set(triggers[i], false);
+                response.clear();
             }
-            response.clear();
         }
 
         this.resolveCollisions();

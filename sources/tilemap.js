@@ -22,16 +22,16 @@ class TileMap {
         container.addChild(this.graphics);
         solids = this.solids;
         triggers = this.triggers;
-        for (var i in triggers) {
-            triggers[i].addTo(app.stage);
+        for (var trigger of triggers) {
+            trigger.addTo(app.stage);
         }
     }
 
     remove() {
         this.graphics.parent.removeChild(this.graphics);
         solids = [];
-        for (var i in triggers) {
-            triggers[i].remove();
+        for (var trigger of triggers) {
+            trigger.remove();
         }
         triggers = [];
     }

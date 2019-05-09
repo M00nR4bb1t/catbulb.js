@@ -100,11 +100,8 @@ function init(loader, resources) {
 
 function update(delta) {
     player.update(delta);
-    for (var i in triggers) {
-        triggers[i].update(delta);
-    }
-    for (var i in needsUpdate) {
-        needsUpdate[i].update(delta);
+    for (var elem of needsUpdate) {
+        elem.update(delta);
     }
 
     for (var key in keyPressed) {keyPressed[key] = false;}

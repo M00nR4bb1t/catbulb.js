@@ -3,11 +3,13 @@ class EventPlayer {
         this.events = events;
         this.index = 0;
         this.playing = false;
+        this.callback = null;
     }
 
-    play(index=0) {
+    play(index=0, callback=null) {
         this.index = index;
         this.playing = true;
+        this.callback = callback;
         this.events[this.index].play(this);
     }
 
@@ -16,14 +18,11 @@ class EventPlayer {
         if (this.index >= this.events.length) {
             this.index = 0;
             this.playing = false;
+            if (this.callback != null) {
+                this.callback();
+            }
         } else {
             this.events[this.index].play(this);
-        }
-    }
-
-    update(delta) {
-        if (this.playing) {
-            this.events[this.index].update(delta);
         }
     }
 }
@@ -38,14 +37,17 @@ class Trigger extends Entity {
     }
 
     play(index=0) {
-        this.eventPlayer.play(index);
+        player.vel.x = 0;
+        player.vel.y = 0;
+        player.paralyzed = true;
+        this.eventPlayer.play(index, this.onEventPlayerFinish);
+    }
+
+    onEventPlayerFinish() {
+        player.paralyzed = false;
     }
 
     isPlaying() {
         return this.eventPlayer.playing;
-    }
-
-    update(delta) {
-        this.eventPlayer.update(delta);
     }
 }

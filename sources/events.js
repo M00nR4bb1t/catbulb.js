@@ -47,12 +47,14 @@ Events.Message = class extends Events.BaseEvent {
         this.reveal = 0;
         this.bitmapText.text = '';
         gui.addChild(this.container);
+        needsUpdate.push(this);
     }
 
     update(delta) {
         if (this.waning) {
             if (this.time < 0) {
                 gui.removeChild(this.container);
+                needsUpdate.remove(this);
                 this.trigger.next();
             }
 
@@ -118,8 +120,8 @@ Events.MapChange = class extends Events.BaseEvent {
             }
             response.clear();
         }
-        for (var i in gui.children) {
-            gui.removeChild(gui.children[i]);
+        for (var child of gui.children) {
+            gui.removeChild(child);
         } 
         this.trigger.next();
 
@@ -154,7 +156,7 @@ Events.MapChange = class extends Events.BaseEvent {
         if (this.time > 120) {
             this.t -= 1/10;
             if (this.t < 0) {
-                needsUpdate.splice(needsUpdate.indexOf(this), 1);
+                needsUpdate.remove(this);
                 gui.removeChild(this.container);
                 return;
             }

@@ -41,10 +41,11 @@
     ],
     "events": {
         "doorOut": [
-            {"type":"MapChange", "arguments":{"map":"livingRoom", "x":368}}
+            {"type":"MapChange", "arguments":{"map":"livingRoom", "x":367}}
         ],
         "doorToKitchen": [
-            {"type":"MapChange", "arguments":{"map":"kitchen", "x":112}}
+            {"type":"MapChange", "arguments":{"map":"kitchen", "x":113}},
+            {"type":"Message", "arguments":{"message":"I'm in the mood for snacking on something..."}}
         ],
         "sink": [
             {"type":"Message", "arguments":{"message":"A kitchen sink."}},

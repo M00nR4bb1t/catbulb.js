@@ -11,6 +11,10 @@ var Spritesheet = {
     }
 }
 
+Array.prototype.remove = function(item) {
+    this.splice(this.indexOf(item), 1);
+};
+
 class BitmapText extends PIXI.Graphics {
     constructor(text, wrapWidth) {
         super();
