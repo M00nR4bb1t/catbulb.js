@@ -51,7 +51,8 @@ class BitmapText extends PIXI.Graphics {
                     continue;
                 }
                 var shakeOffset = Math.round((Math.sin(Date.now() / 100 + i) - 0.5) * shake);
-                this.beginTextureFill(fonts.ascii[charCode], tint, 1, new PIXI.Matrix(1, 0, 0, 1, 0, shakeOffset));
+                var texture = fonts.ascii[charCode];
+                this.beginTextureFill(texture, tint, 1, new PIXI.Matrix(1, 0, 0, 1, Math.floor(x % texture.width), Math.floor((y + shakeOffset) % texture.width)));
                 this.drawRect(x, y + shakeOffset, charWidth, charHeight);
                 this.endFill();
                 x += charWidth;
@@ -107,13 +108,16 @@ class BitmapText extends PIXI.Graphics {
                 }
 
                 var shakeOffset = Math.round((Math.sin(Date.now() / 100 + i) - 0.5) * shake);
-                this.beginTextureFill(fonts.kr[choBul * 32 + cho], tint, 1, new PIXI.Matrix(1, 0, 0, 1, 0, shakeOffset));
+                var texture = fonts.kr[choBul * 32 + cho];
+                this.beginTextureFill(texture, tint, 1, new PIXI.Matrix(1, 0, 0, 1, Math.floor(x % texture.width), Math.floor((y + shakeOffset) % texture.width)));
                 this.drawRect(x, y + shakeOffset, charWidth, charHeight);
                 this.endFill();
-                this.beginTextureFill(fonts.kr[(jungBul + 8) * 32 + jung], tint, 1, new PIXI.Matrix(1, 0, 0, 1, 0, shakeOffset));
+                texture = fonts.kr[(jungBul + 8) * 32 + jung];
+                this.beginTextureFill(texture, tint, 1, new PIXI.Matrix(1, 0, 0, 1, Math.floor(x % texture.width), Math.floor((y + shakeOffset) % texture.width)));
                 this.drawRect(x, y + shakeOffset, charWidth, charHeight);
                 this.endFill();
-                this.beginTextureFill(fonts.kr[(jongBul + 12) * 32 + jong], tint, 1, new PIXI.Matrix(1, 0, 0, 1, 0, shakeOffset));
+                texture = fonts.kr[(jongBul + 12) * 32 + jong];
+                this.beginTextureFill(texture, tint, 1, new PIXI.Matrix(1, 0, 0, 1, Math.floor(x % texture.width), Math.floor((y + shakeOffset) % texture.width)));
                 this.drawRect(x, y + shakeOffset, charWidth, charHeight);
                 this.endFill();
                 x += charWidth;
