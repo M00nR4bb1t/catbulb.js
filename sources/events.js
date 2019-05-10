@@ -68,7 +68,7 @@ Events.Message = class extends Events.BaseEvent {
                 this.bitmapText.text = this.args.message.substr(0, this.reveal);
             }
             
-            if (this.time > 0 && keyPressed.KeyZ) {
+            if (this.time > 0 && (keyPressed.KeyZ || gamepadButtonPressed[0])) {
                 if (this.bitmapText.text != this.args.message) {
                     this.bitmapText.text = this.args.message;
                 } else {

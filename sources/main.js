@@ -43,6 +43,9 @@ var gui = new PIXI.Container();
 app.stage.addChild(gui);
 
 var keyDown = {}, keyPressed = {}, keyReleased = {};
+var gamepads = [], needsGamepadScan = false;
+var gamepadButtonDown = {}, gamepadButtonPressed = {}, gamepadButtonReleased = {};
+var gamepadAxes = [];
 
 function init(loader, resources) {
     if (dataJSON.gui.fonts.ascii) fonts.ascii = Spritesheet.cut(resources[dataJSON.gui.fonts.ascii].texture, 16, 8);
@@ -93,12 +96,19 @@ function init(loader, resources) {
     player = new Player(new SAT.V(224, 160), Spritesheet.cut(resources['assets/sprites/player_idle.png'].texture, 2, 1), Spritesheet.cut(resources['assets/sprites/player_walk.png'].texture, 4, 1));
     player.addTo(viewport);
 
-    document.addEventListener('keydown', e => onKeyDown(e.code));
-    document.addEventListener('keyup', e => onKeyUp(e.code));
+    document.addEventListener('keydown', e => onKeyDown(e));
+    document.addEventListener('keyup', e => onKeyUp(e));
+    if (window.hasOwnProperty('ongamepadconnected')) {
+        document.addEventListener('gamepadconnected', e => onGamepadConnected(e));
+        document.addEventListener('gamepaddisconnected', e => onGamepadDisconnected(e));
+    } else {
+        needsGamepadScan = true;
+    }
     app.ticker.add(delta => update(delta));
 }
 
 function update(delta) {
+    updateGamepadInputs();
     player.update(delta);
     for (var elem of needsUpdate) {
         elem.update(delta);
@@ -106,6 +116,8 @@ function update(delta) {
 
     for (var key in keyPressed) {keyPressed[key] = false;}
     for (var key in keyReleased) {keyReleased[key] = false;}
+    for (var button in gamepadButtonPressed) {gamepadButtonPressed[button] = false;}
+    for (var button in gamepadButtonReleased) {gamepadButtonReleased[button] = false;}
 
     viewport.children.sort(zSort);
 }
@@ -114,12 +126,51 @@ function zSort(a, b) {
     return a.z - b.z;
 }
 
-function onKeyDown(code) {
-    if (!keyDown[code]) keyPressed[code] = true;
-    keyDown[code] = true;
+function onKeyDown(e) {
+    if (!keyDown[e.code]) keyPressed[e.code] = true;
+    keyDown[e.code] = true;
 }
 
-function onKeyUp(code) {
-    keyReleased[code] = true;
-    keyDown[code] = false;
+function onKeyUp(e) {
+    keyReleased[e.code] = true;
+    keyDown[e.code] = false;
+}
+
+function onGamepadConnected(e) {
+    gamepads.push(e.gamepad);
+}
+
+function onGamepadDisconnected(e) {
+    gamepads.remove(e.gamepad);
+}
+
+function updateGamepadInputs() {
+    if (needsGamepadScan) {
+        gamepads = [];
+        for (var gamepad of (navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []))) {
+            if (gamepad) {
+                gamepads[gamepad.index] = gamepad;
+            }
+        }
+    }
+
+    if (gamepads.length < 1) {
+        return;
+    }
+
+    var _gamepadButtonDown = [];
+    for (var gamepad of gamepads) {
+        for (var i=0; i<gamepad.buttons.length; i++) {
+            _gamepadButtonDown[i] = _gamepadButtonDown[i] || gamepad.buttons[i].pressed;
+        }
+    }
+    for (var i=0; i<_gamepadButtonDown.length; i++) {
+        if (_gamepadButtonDown[i] && !gamepadButtonDown[i]) {
+            gamepadButtonPressed[i] = true;
+        } else if (gamepadButtonDown[i] && !_gamepadButtonDown[i]) {
+            gamepadButtonReleased[i] = true;
+        }
+    }
+    gamepadAxes = gamepads[0].axes;
+    gamepadButtonDown = _gamepadButtonDown;
 }
