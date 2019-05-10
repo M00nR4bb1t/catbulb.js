@@ -16,17 +16,12 @@ document.body.appendChild(app.view); // Append the canvas to the <body>
 /**
  * Load assets
  */
-var dataJSON;
-new PIXI.Loader()
-    .add('data', 'assets/data.json')
-    .load(function(loader, resources) {
-        dataJSON = resources.data.data;
-        var assetManifest = dataJSON.assets;
-        for (var i=0; i<assetManifest.length; i++) {
-            PIXI.Loader.shared.add(assetManifest[i]);
-        }
-        PIXI.Loader.shared.load(init);
-    });
+dataJSON = getData();
+var assetManifest = dataJSON.assets;
+for (var i=0; i<assetManifest.length; i++) {
+    PIXI.Loader.shared.add(assetManifest[i]);
+}
+PIXI.Loader.shared.load(init);
 
 /**
  * Main Game Logic

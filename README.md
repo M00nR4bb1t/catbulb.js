@@ -60,11 +60,12 @@ catbulb.js/
 │   ├── player.js
 │   ├── tilemap.js
 │   ├── triggers.js
-│   └── utilities.js
+│   ├── utilities.js
+│   │
+│   └── data.js
 ├── assets/
 │   ├── .../
-│   │   └── ...
-│   └── data.json
+│   └── └── ...
 ├── build.py
 ├── index.html
 ├── index.php
@@ -85,6 +86,8 @@ chmod +x build.py
 ```
 Then, you can just include the file like this, preferably at the end of `<body>`:
 ```html
+<!-- You still need the data file, obviously. -->
+<script src="data.js"></script>
 <script src="catbulb.min.js"></script>
 ```
 
@@ -96,6 +99,8 @@ If you *are* looking to edit the catbulb source files, make sure to include all 
 <script src="SAT.min.js"></script>
 
 <!-- catbulb Source Files -->
+<script src="sources/data.js"></script>
+
 <script src="sources/utilities.js"></script>
 <script src="sources/entity.js"></script>
 <script src="sources/events.js"></script>
@@ -107,7 +112,6 @@ If you *are* looking to edit the catbulb source files, make sure to include all 
 
 ### Things to Note
 
-* Although you can store assets using any folder structure you want (specified in the `data.json` file), catbulb will always look for a `data.json` file under `assets` and will throw an error if it cannot find `assets/data.json`. This can be changed in `main.js`.
 * If you want to (for some reason or the other) bundle only catbulb source files without dependencies ([PixiJS](http://www.pixijs.com), [SAT.js](http://jriecken.github.io/sat-js/)), you can do so by running `build.py` without the `--includeDependencies` flag.
 
 ## Features
@@ -120,8 +124,9 @@ If you *are* looking to edit the catbulb source files, make sure to include all 
 * [ ] Events & Triggers
    * [x] `EventPlayer` & `Trigger`
    * [x] Message Event
+   * [x] MapChange Event
 * [ ] Loader
-   * [ ] data.json
+   * [ ] data.js
       * [x] List of Assets
       * [x] Maps
       * [x] Tilesets
@@ -153,4 +158,4 @@ If you *are* looking to edit the catbulb source files, make sure to include all 
    * [ ] ...
 
 ***
-<span id="footnote1">[[1]](#a1)</span> JSON is a *data format*, so not counting that as code here.
+<span id="footnote1">[[1]](#a1)</span> `data.js` is really just JSON, so not counting that as code.

@@ -60,11 +60,12 @@ catbulb.js/
 │   ├── player.js
 │   ├── tilemap.js
 │   ├── triggers.js
-│   └── utilities.js
+│   ├── utilities.js
+│   │
+│   └── data.js
 ├── assets/
 │   ├── .../
-│   │   └── ...
-│   └── data.json
+│   └── └── ...
 ├── build.py
 ├── index.html
 ├── index.php
@@ -85,6 +86,8 @@ chmod +x build.py
 ```
 위 스크립트를 실행하셨다면, `<body>`의 끝에 아래 코드를 더하는 것 만으로 catbulb를 여러분의 프로젝트에 포함시킬 수 있습니다:
 ```html
+<!-- 당연하지만, 데이터 파일은 그래도 필요하죠. -->
+<script src="data.js"></script>
 <script src="catbulb.min.js"></script>
 ```
 
@@ -96,6 +99,8 @@ chmod +x build.py
 <script src="SAT.min.js"></script>
 
 <!-- catbulb Source Files -->
+<script src="sources/data.js"></script>
+
 <script src="sources/utilities.js"></script>
 <script src="sources/entity.js"></script>
 <script src="sources/events.js"></script>
@@ -107,7 +112,6 @@ chmod +x build.py
 
 ### 알아 둘 것들
 
-* 에셋의 디렉토리 구조는 `data.json` 파일을 수정함으로써 원하는 대로 바꾸실 수 있지만, catbulb 는 언제나 `assets/` 폴더에서 `data.json` 파일을 찾을 것이며, 해당 파일이 존재하지 않는다면 에러를 발생시킬 것입니다. 이는 `main.js` 파일에서 변경할 수 있습니다.
 * 어떠한 이유로 dependency들은 ([PixiJS](http://www.pixijs.com), [SAT.js](http://jriecken.github.io/sat-js/)) 제외하고 오로지 catbulb 소스 파일들 만을 결합 및 경량화 시키시고 싶다면, `build.py`를 `--includeDependencies` 플래그 없이 실행 시키시면 됩니다.
 
 ## 기능
@@ -120,8 +124,9 @@ chmod +x build.py
 * [ ] Events & Triggers
    * [x] `EventPlayer` & `Trigger`
    * [x] Message 이벤트
+   * [x] MapChange 이벤트
 * [ ] Loader
-   * [ ] data.json
+   * [ ] data.js
       * [x] 에셋 목록
       * [x] 맵
       * [x] 타일셋
@@ -153,4 +158,4 @@ chmod +x build.py
    * [ ] ...
 
 ***
-<span id="footnote1">[[1]](#a1)</span> JSON은 *데이터 포맷*으로, 코드로 치지 않습니다.
+<span id="footnote1">[[1]](#a1)</span> `data.js`는 사실상 JSON이므로, 코드로 치지 않습니다.

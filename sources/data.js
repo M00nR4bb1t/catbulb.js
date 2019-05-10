@@ -1,4 +1,6 @@
-{
+var getData=function()
+{return {
+    // List of assets
     "assets": [
         "assets/gui/font_ascii.png",
         "assets/gui/font_kr.png",
@@ -11,12 +13,16 @@
         "assets/maps/test.json",
         "assets/maps/livingRoom.json"
     ],
+
+    // GUI Settings
     "gui": {
         "fonts": {
             "ascii":"assets/gui/font_ascii.png",
             "kr":"assets/gui/font_kr.png"
         }
     },
+
+    // Tilesets
     "tilesets": [
         {
             "name":"indoors",
@@ -25,6 +31,8 @@
             "height":8
         }
     ],
+
+    // Maps
     "maps": [
         {
             "displayName":"Kitchen",
@@ -39,6 +47,8 @@
             "tileset":"indoors"
         }
     ],
+
+    // Events
     "events": {
         "doorOut": [
             {"type":"MapChange", "arguments":{"map":"livingRoom", "x":367}}
@@ -68,4 +78,4 @@
             {"type":"Message", "arguments":{"message":"Looks cozy."}}
         ]
     }
-}
+}}
