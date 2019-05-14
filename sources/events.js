@@ -167,3 +167,45 @@ Events.MapChange = class extends Events.BaseEvent {
         this.bitmapText.redraw();
     }
 }
+
+Events.AddFilter = class extends Events.BaseEvent {
+    constructor(args) {
+        super(args);
+    }
+
+    play(trigger) {
+        super.play(trigger);
+        if (window[this.args.container].filters) {
+            window[this.args.container].filters.push(filters[this.args.filter]);
+        } else {
+            window[this.args.container].filters = [filters[this.args.filter]];
+        }
+        this.trigger.next();
+    }
+}
+
+Events.RemoveFilter = class extends Events.BaseEvent {
+    constructor(args) {
+        super(args);
+    }
+
+    play(trigger) {
+        super.play(trigger);
+        if (window[this.args.container].filters) {
+            window[this.args.container].filters.remove(filters[this.args.filter]);
+        }
+        this.trigger.next();
+    }
+}
+
+Events.ClearFilters = class extends Events.BaseEvent {
+    constructor(args) {
+        super(args);
+    }
+
+    play(trigger) {
+        super.play(trigger);
+        window[this.args.container].filters = [];
+        this.trigger.next();
+    }
+}

@@ -1,9 +1,12 @@
-var getData=function()
-{return {
+var dataJSON = {
     // List of assets
     "assets": [
         "assets/gui/font_ascii.png",
         "assets/gui/font_kr.png",
+
+        "assets/shaders/grayscale.frag",
+        "assets/shaders/red.frag",
+        "assets/shaders/rgbsplit.frag",
 
         "assets/sprites/player_idle.png",
         "assets/sprites/player_walk.png",
@@ -21,6 +24,22 @@ var getData=function()
             "kr":"assets/gui/font_kr.png"
         }
     },
+
+    // Filters
+    "filters": [
+        {
+            "name":"grayscale",
+            "fragment":"assets/shaders/grayscale.frag"
+        },
+        {
+            "name":"red",
+            "fragment":"assets/shaders/red.frag"
+        },
+        {
+            "name":"rgbsplit",
+            "fragment":"assets/shaders/rgbsplit.frag"
+        }
+    ],
 
     // Tilesets
     "tilesets": [
@@ -51,7 +70,9 @@ var getData=function()
     // Events
     "events": {
         "doorOut": [
-            {"type":"MapChange", "arguments":{"map":"livingRoom", "x":367}}
+            {"type":"MapChange", "arguments":{"map":"livingRoom", "x":367}},
+            {"type":"AddFilter", "arguments":{"container":"viewport", "filter":"grayscale"}},
+            {"type":"Message", "arguments":{"message":"...the lights turned off."}}
         ],
         "doorToKitchen": [
             {"type":"MapChange", "arguments":{"map":"kitchen", "x":113}},
@@ -78,4 +99,4 @@ var getData=function()
             {"type":"Message", "arguments":{"message":"Looks cozy."}}
         ]
     }
-}}
+}

@@ -16,7 +16,6 @@ document.body.appendChild(app.view); // Append the canvas to the <body>
 /**
  * Load assets
  */
-dataJSON = getData();
 var assetManifest = dataJSON.assets;
 for (var i=0; i<assetManifest.length; i++) {
     PIXI.Loader.shared.add(assetManifest[i]);
@@ -26,7 +25,7 @@ PIXI.Loader.shared.load(init);
 /**
  * Main Game Logic
  */
-var fonts = {};
+var fonts = {}, filters = {};
 var tilesets = {}, maps = {};
 var map, solids = [], triggers = [];
 var needsUpdate = [];
@@ -45,6 +44,10 @@ var gamepadAxes = [];
 function init(loader, resources) {
     if (dataJSON.gui.fonts.ascii) fonts.ascii = Spritesheet.cut(resources[dataJSON.gui.fonts.ascii].texture, 16, 8);
     if (dataJSON.gui.fonts.kr) fonts.kr = Spritesheet.cut(resources[dataJSON.gui.fonts.kr].texture, 32, 16);
+
+    for (var i=0; i<dataJSON.filters.length; i++) {
+        filters[dataJSON.filters[i].name] = new PIXI.Filter(dataJSON.filters[i].vertex? resources[dataJSON.filters[i].vertex].data:undefined, dataJSON.filters[i].fragment? resources[dataJSON.filters[i].fragment].data:undefined);
+    }
 
     for (var i=0; i<dataJSON.tilesets.length; i++) {
         tilesets[dataJSON.tilesets[i].name] = Spritesheet.cut(resources[dataJSON.tilesets[i].file].texture, dataJSON.tilesets[i].width, dataJSON.tilesets[i].height);
