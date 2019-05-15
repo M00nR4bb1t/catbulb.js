@@ -1,16 +1,8 @@
 var Events = {};
 
-Events.BaseEvent = class {
-    constructor(args) {this.trigger = null; this.args = args;}
-    play(trigger) {this.trigger = trigger;}
-    update() {}
-    keydown() {}
-    keyup() {}
-}
-
-Events.Message = class extends Events.BaseEvent {
+Events.Message = class {
     constructor(args) {
-        super(args);
+        this.args = args;
         
         this.width = Math.ceil(width / 5 * 3);
         this.height = Math.ceil(height / 3);
@@ -40,7 +32,7 @@ Events.Message = class extends Events.BaseEvent {
     }
 
     play(trigger) {
-        super.play(trigger);
+        this.trigger = trigger;
         this.container.y = height;
         this.time = 0;
         this.waning = false;
@@ -85,9 +77,9 @@ Events.Message = class extends Events.BaseEvent {
     }
 }
 
-Events.MapChange = class extends Events.BaseEvent {
+Events.MapChange = class {
     constructor(args) {
-        super(args);
+        this.args = args;
 
         this.time = 0;
         this.t = 0;
@@ -103,7 +95,7 @@ Events.MapChange = class extends Events.BaseEvent {
     }
 
     play(trigger) {
-        super.play(trigger);
+        this.trigger = trigger;
         map.remove();
         (map = maps[this.args.map]).addTo(viewport);
         if (this.args.x != undefined) {
@@ -168,13 +160,13 @@ Events.MapChange = class extends Events.BaseEvent {
     }
 }
 
-Events.AddFilter = class extends Events.BaseEvent {
+Events.AddFilter = class {
     constructor(args) {
-        super(args);
+        this.args = args;
     }
 
     play(trigger) {
-        super.play(trigger);
+        this.trigger = trigger;
         if (window[this.args.container].filters) {
             window[this.args.container].filters.push(filters[this.args.filter]);
         } else {
@@ -184,13 +176,13 @@ Events.AddFilter = class extends Events.BaseEvent {
     }
 }
 
-Events.RemoveFilter = class extends Events.BaseEvent {
+Events.RemoveFilter = class {
     constructor(args) {
-        super(args);
+        this.args = args;
     }
 
     play(trigger) {
-        super.play(trigger);
+        this.trigger = trigger;
         if (window[this.args.container].filters) {
             window[this.args.container].filters.remove(filters[this.args.filter]);
         }
@@ -198,13 +190,13 @@ Events.RemoveFilter = class extends Events.BaseEvent {
     }
 }
 
-Events.ClearFilters = class extends Events.BaseEvent {
+Events.ClearFilters = class {
     constructor(args) {
-        super(args);
+        this.args = args;
     }
 
     play(trigger) {
-        super.play(trigger);
+        this.trigger = trigger;
         window[this.args.container].filters = [];
         this.trigger.next();
     }
