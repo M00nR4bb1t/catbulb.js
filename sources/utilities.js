@@ -15,6 +15,10 @@ Array.prototype.remove = function(item) {
     this.splice(this.indexOf(item), 1);
 };
 
+Math.clamp = function(x, min, max) {
+    return Math.min(Math.max(x, min), max);
+}
+
 class BitmapText extends PIXI.Graphics {
     constructor(text, wrapWidth) {
         super();

@@ -32,6 +32,7 @@ var needsUpdate = [];
 var player;
 
 var viewport = new PIXI.Container();
+var camera = new Camera(viewport);
 app.stage.addChild(viewport);
 var gui = new PIXI.Container();
 app.stage.addChild(gui);
@@ -111,6 +112,7 @@ function update(delta) {
     for (var elem of needsUpdate) {
         elem.update(delta);
     }
+    camera.follow(player);
 
     for (var key in keyPressed) {keyPressed[key] = false;}
     for (var key in keyReleased) {keyReleased[key] = false;}
