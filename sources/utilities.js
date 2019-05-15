@@ -33,7 +33,10 @@ class BitmapText extends PIXI.Graphics {
         var shake = 0, tint = 0xffffff;
         for (var i=0; i<this.text.length; i++) {
             var charCode = this.text.charCodeAt(i);
-            if (charCode == 167 && this.text.length > i + 1 && this.text.charCodeAt(i + 1) == 123) {
+            if (charCode == 10) {
+                y += charHeight;
+                x = 0;
+            } else if (charCode == 167 && this.text.length > i + 1 && this.text.charCodeAt(i + 1) == 123) {
                 var JSONString = this.text.substr(i + 1).match(/{.*?}/g)[0];
                 var JSONData = JSON.parse(JSONString);
                 
@@ -41,14 +44,18 @@ class BitmapText extends PIXI.Graphics {
                     shake = JSONData.shake;
                 }
                 if (JSONData.tint != undefined) {
-                    tint = JSONData.tint;
+                    if ((typeof JSONData.tint) == 'string' && JSONData.tint.charAt(0) == '#') {
+                        tint = parseInt(JSONData.tint.substr(1), 16);
+                    } else {
+                        tint = JSONData.tint;
+                    }
                 }
 
                 i += JSONString.length;
                 continue;
             } else if (charCode < 128) {
                 var charWidth = fonts.ascii[0].width, charHeight = fonts.ascii[0].height;
-                var nextWord = this.text.substr(i).match(/ .*?(?=(?: |$))/g);
+                var nextWord = this.text.substr(i).match(/ .*?(?=(?: |\n|§|$))/g);
                 if (charCode == 32 && nextWord != null && x + charWidth * nextWord[0].length > this.wrapWidth) {
                     y += charHeight;
                     x = 0;

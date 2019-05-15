@@ -72,31 +72,31 @@ var dataJSON = {
         "doorOut": [
             {"type":"MapChange", "arguments":{"map":"livingRoom", "x":367}},
             {"type":"AddFilter", "arguments":{"container":"viewport", "filter":"grayscale"}},
-            {"type":"Message", "arguments":{"message":"...the lights turned off."}}
+            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"...the lights turned off."}}
         ],
         "doorToKitchen": [
             {"type":"MapChange", "arguments":{"map":"kitchen", "x":113}},
-            {"type":"Message", "arguments":{"message":"I'm in the mood for snacking on something..."}}
+            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"I'm in the mood for snacking on something..."}}
         ],
         "sink": [
-            {"type":"Message", "arguments":{"message":"A kitchen sink."}},
-            {"type":"Message", "arguments":{"message":"...the faucet doesn't seem to work."}}
+            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"A kitchen sink."}},
+            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"...the faucet doesn't seem to work."}}
         ],
         "stove": [
-            {"type":"Message", "arguments":{"message":"A gas stove."}},
-            {"type":"Message", "arguments":{"message":"§{\"shake\":1, \"tint\":16711680}Ow!§{\"shake\":0, \"tint\":16777215} It's still hot."}}
+            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"A gas stove."}},
+            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"§{\"shake\":1, \"tint\":16711680}Ow!§{\"shake\":0, \"tint\":16777215} It's still hot."}}
         ],
         "kitchenHole": [
-            {"type":"Message", "arguments":{"message":"A big hole, around 2 meters in diameter."}},
-            {"type":"Message", "arguments":{"message":"§{\"shake\":3}...Woah!§{\"shake\":0} I almost fell down through the hole!"}}
+            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"A big hole, around 2 meters in diameter."}},
+            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"§{\"shake\":3}...Woah!§{\"shake\":0} I almost fell down through the hole!"}}
         ],
         "fireplace": [
-            {"type":"Message", "arguments":{"message":"A wood-burning fireplace."}},
-            {"type":"Message", "arguments":{"message":"I can hear the firewood crackle."}}
+            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"A wood-burning fireplace."}},
+            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"I can hear the firewood crackle."}}
         ],
         "sofa": [
-            {"type":"Message", "arguments":{"message":"A couch."}},
-            {"type":"Message", "arguments":{"message":"Looks cozy."}}
+            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"A couch."}},
+            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"Looks cozy."}}
         ]
     }
 }

@@ -25,10 +25,18 @@ Events.Message = class {
         this.graphics.drawRect(2, 2, this.width - 4, this.height - 4);
         this.graphics.endFill();
 
-        this.bitmapText = new BitmapText('', this.width - 12);
-        this.bitmapText.x = Math.floor(-this.width / 2 + 6);
-        this.bitmapText.y = 6;
-        this.container.addChild(this.bitmapText);
+        this.messageText = new BitmapText('', this.width - 12);
+        this.messageText.x = Math.floor(-this.width / 2 + 6);
+        this.messageText.y = 6;
+        this.container.addChild(this.messageText);
+
+        if (this.args.name) {
+            this.nameText = new BitmapText(`-${this.args.name}-`, this.width - 12);
+            this.nameText.x = Math.floor(-this.width / 2 + 6);
+            this.nameText.y = 6;
+            this.container.addChild(this.nameText);
+            this.messageText.y += this.nameText.height;
+        }
     }
 
     play(trigger) {
@@ -37,7 +45,7 @@ Events.Message = class {
         this.time = 0;
         this.waning = false;
         this.reveal = 0;
-        this.bitmapText.text = '';
+        this.messageText.text = '';
         gui.addChild(this.container);
         needsUpdate.push(this);
     }
@@ -52,17 +60,17 @@ Events.Message = class {
 
             this.time -= delta;
         } else {
-            if (this.time % 2 < 1 && this.bitmapText.text != this.args.message) {
+            if (this.time % 2 < 1 && this.messageText.text != this.args.message) {
                 this.reveal++;
                 if (this.args.message.charAt(this.reveal - 1) == '§') {
                     this.reveal += this.args.message.substr(this.reveal).match(/{.*?}/g)[0].length;
                 }
-                this.bitmapText.text = this.args.message.substr(0, this.reveal);
+                this.messageText.text = this.args.message.substr(0, this.reveal);
             }
             
             if (this.time > 0 && (keyPressed.KeyZ || gamepadButtonPressed[0])) {
-                if (this.bitmapText.text != this.args.message) {
-                    this.bitmapText.text = this.args.message;
+                if (this.messageText.text != this.args.message) {
+                    this.messageText.text = this.args.message;
                 } else {
                     this.time = 7;
                     this.waning = true;
@@ -73,7 +81,8 @@ Events.Message = class {
         }
 
         this.container.y = Math.floor(height - (Math.pow(Math.min(this.time / 7, 1) - 1, 3) + 1) * this.height * 1.25);
-        this.bitmapText.redraw();
+        this.messageText.redraw();
+        this.nameText.redraw();
     }
 }
 
