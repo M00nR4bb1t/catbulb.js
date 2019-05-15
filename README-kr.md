@@ -10,6 +10,8 @@
     - [알아 둘 것들](#%EC%95%8C%EC%95%84-%EB%91%98-%EA%B2%83%EB%93%A4)
   - [기능](#%EA%B8%B0%EB%8A%A5)
 
+>**DISCLAIMER: 본 README는 현재 갱신되고 있지 않습니다.**
+
 >**DISCLAIMER: catbulb는 현재 개발의 극초기 단계에 있습니다. 이에 따라, 본 README의 본문에서 언급될 기능들 중 일부는 아직 구현되지 않았을 수 있습니다. 이러한 기능들은 (Features 섹션에서처럼 체크박스 등으로 따로 표기되지 않은 경우) ~~취소선을 통해~~ 표기되어 있습니다.<br><br>본 README는 [원본 README](https://github.com/M00nR4bb1t/catbulb.js/blob/master/README.md)의 번역본입니다. 원본에 비하여 수정이 늦어질수 있는 점 양해 부탁드립니다.**
 
 ***catbulb.js***는 JavaScript JRPG풍 어드벤쳐 게임 프레임워크입니다. ([데모](https://catbulb-demo.herokuapp.com)) [PixiJS](http://pixijs.com)를 기반으로 하여 WebGL과 HTML5 Canvas API 둘 모두를 지원하며, [Electron](https://electronjs.org/) 따위를 통해 데스크탑으로도 쉽게 포팅 가능합니다.

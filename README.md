@@ -10,6 +10,8 @@
     - [Things to Note](#things-to-note)
   - [Features](#features)
 
+>**DISCLAIMER: This README is currently NOT BEING UPDATED.**
+
 >**DISCLAIMER: catbulb is currently in its earliest stage of development. As such, some features mentioned in this README may not have been implemented yet. Such features (unless explicitly marked otherwise, such as with checkboxes in the Features section) are marked with ~~a strikethrough~~.**
 
 ***catbulb.js*** is a JavaScript framework for jrpg-esque adventure games on the web. ([demo](https://catbulb-demo.herokuapp.com)) Powered by [PixiJS](http://pixijs.com), it has full support for both WebGL and the HTML5 Canvas API. It can also be ported effortlessly to desktop using something like [Electron](https://electronjs.org/).
