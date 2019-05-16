@@ -70,13 +70,18 @@ var dataJSON = {
     // Events
     "events": {
         "doorOut": [
+            {"type":"Selection", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"Go out?", "options":[{"text":"Yes", "events":"goOut"}, {"text":"No"}]}}
+        ],
+        "goOut": [
             {"type":"MapChange", "arguments":{"map":"livingRoom", "x":367}},
             {"type":"AddFilter", "arguments":{"container":"viewport", "filter":"grayscale"}},
             {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"...the lights turned off."}}
         ],
         "doorToKitchen": [
-            {"type":"MapChange", "arguments":{"map":"kitchen", "x":113}},
-            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"I'm in the mood for snacking on something..."}}
+            {"type":"Selection", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"Go into the kitchen?", "options":[{"text":"Yes", "events":"goToKitchen"}, {"text":"No"}]}}
+        ],
+        "goToKitchen": [
+            {"type":"MapChange", "arguments":{"map":"kitchen", "x":113}}
         ],
         "sink": [
             {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"A kitchen sink."}},

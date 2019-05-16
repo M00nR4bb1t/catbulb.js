@@ -27,7 +27,7 @@ PIXI.Loader.shared.load(init);
  */
 var fonts = {}, filters = {};
 var tilesets = {}, maps = {};
-var map, solids = [], triggers = [];
+var map, solids = [], eventPlayers = [], triggers = [];
 var needsUpdate = [];
 var player;
 
@@ -53,6 +53,14 @@ function init(loader, resources) {
     for (var i=0; i<dataJSON.tilesets.length; i++) {
         tilesets[dataJSON.tilesets[i].name] = Spritesheet.cut(resources[dataJSON.tilesets[i].file].texture, dataJSON.tilesets[i].width, dataJSON.tilesets[i].height);
     }
+
+    for (var key in dataJSON.events) {
+        var events = [];
+        for (var i=0; i<dataJSON.events[key].length; i++) {
+            events[i] = new Events[dataJSON.events[key][i].type](dataJSON.events[key][i].arguments);
+        }
+        eventPlayers[key] = new EventPlayer(events);
+    }
     
     for (var i=0; i<dataJSON.maps.length; i++) {
         var mapJSON = resources[dataJSON.maps[i].file].data;
@@ -71,15 +79,10 @@ function init(loader, resources) {
                     }
                     
                     if (types.indexOf('trigger') != -1) {
-                        var events = [];
-                        var eventsData = dataJSON.events[mapJSON.layers[j].objects[k].name];
-                        for (var l=0; l<eventsData.length; l++) {
-                            events[l] = new Events[eventsData[l].type](eventsData[l].arguments);
-                        }
                         _triggers.push(new Trigger(
                                 new SAT.V(mapJSON.layers[j].objects[k].x, mapJSON.layers[j].objects[k].y),
                                 new SAT.Box(new SAT.V(0, 0), mapJSON.layers[j].objects[k].width, mapJSON.layers[j].objects[k].height).toPolygon(),
-                                events,
+                                eventPlayers[mapJSON.layers[j].objects[k].name],
                                 (types.indexOf('autoTrigger') != -1)
                             )
                         );

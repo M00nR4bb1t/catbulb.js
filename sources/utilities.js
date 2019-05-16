@@ -19,18 +19,23 @@ Math.clamp = function(x, min, max) {
     return Math.min(Math.max(x, min), max);
 }
 
+Math.modulo = function(a, b) {
+    return ((a%b)+b)%b;
+};
+
 class BitmapText extends PIXI.Graphics {
-    constructor(text, wrapWidth) {
+    constructor(text, wrapWidth, tint=0xffffff) {
         super();
         this.text = text;
         this.wrapWidth = wrapWidth;
+        this.tint = tint;
         this.redraw();
     }
 
     redraw() {
         this.clear();
         var x = 0, y = 0;
-        var shake = 0, tint = 0xffffff;
+        var shake = 0, tint = this.tint;
         for (var i=0; i<this.text.length; i++) {
             var charCode = this.text.charCodeAt(i);
             if (charCode == 10) {

@@ -89,10 +89,10 @@
                  "id":15,
                  "name":"doorToKitchen",
                  "rotation":0,
-                 "type":"trigger,autoTrigger",
+                 "type":"trigger",
                  "visible":true,
-                 "width":1,
-                 "x":383,
+                 "width":32,
+                 "x":352,
                  "y":160
                 }, 
                 {
