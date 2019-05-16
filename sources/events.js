@@ -11,10 +11,10 @@ Events.Message = class {
         this.waning = false;
 
         this.container = new PIXI.Container();
-        this.container.x = Math.floor(width / 2);
+        this.container.x = Math.floor(width / 2 - this.width / 2);
 
         this.graphics = new PIXI.Graphics();
-        this.graphics.x = -this.width / 2;
+        this.graphics.x = 0;
         this.container.addChild(this.graphics);
 
         this.graphics.beginFill(0xffffc9);
@@ -26,16 +26,16 @@ Events.Message = class {
         this.graphics.endFill();
 
         this.messageText = new BitmapText('', this.width - 12);
-        this.messageText.x = Math.floor(-this.width / 2 + 6);
-        this.messageText.y = 6;
+        this.messageText.x = 6;
+        this.messageText.y = 8;
         this.container.addChild(this.messageText);
 
         if (this.args.name) {
-            this.nameText = new BitmapText(`-${this.args.name}-`, this.width - 12);
-            this.nameText.x = Math.floor(-this.width / 2 + 6);
-            this.nameText.y = 6;
+            this.nameText = new BitmapText(this.args.name, this.width - 12);
+            this.nameText.x = 6;
+            this.nameText.y = 8;
             this.container.addChild(this.nameText);
-            this.messageText.y += this.nameText.height;
+            this.messageText.y = 12 + this.nameText.height;
         }
     }
 
