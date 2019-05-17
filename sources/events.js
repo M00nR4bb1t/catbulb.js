@@ -60,7 +60,7 @@ Events.Message = class {
 
             this.time -= delta;
         } else {
-            if (this.time % 2 < 1 && this.messageText.text != this.args.message) {
+            if (this.time % ((keyDown.KeyX || gamepadButtonDown[1])? 1:3) < 1 && this.messageText.text != this.args.message) {
                 this.reveal++;
                 if (this.args.message.charAt(this.reveal - 1) == '§') {
                     this.reveal += this.args.message.substr(this.reveal).match(/{.*?}/g)[0].length;
@@ -183,7 +183,7 @@ Events.Selection = class {
 
             this.time -= delta;
         } else {
-            if (this.time % 2 < 1 && this.messageText.text != this.args.message) {
+            if (this.time % ((keyDown.KeyX || gamepadButtonDown[1])? 1:3) < 1 && this.messageText.text != this.args.message) {
                 this.reveal++;
                 if (this.args.message.charAt(this.reveal - 1) == '§') {
                     this.reveal += this.args.message.substr(this.reveal).match(/{.*?}/g)[0].length;
@@ -200,7 +200,7 @@ Events.Selection = class {
                 }
             }
 
-            if (keyPressed.ArrowDown) {
+            if (keyPressed.ArrowDown || gamepadButtonPressed[13] || (Math.sqrt(Math.pow(gamepadAxesPrev[0], 2) + Math.pow(gamepadAxesPrev[1], 2)) < 0.5 && Math.sqrt(Math.pow(gamepadAxes[0], 2) + Math.pow(gamepadAxes[1], 2)) >= 0.5 && Math.clamp(Math.rad2deg(Math.atan2(gamepadAxes[1], gamepadAxes[0])), 225, 315) == Math.rad2deg(Math.atan2(gamepadAxes[1], gamepadAxes[0])))) {
                 this.selection = Math.modulo(this.selection + 1, this.args.options.length);
     
                 for (var i=0; i<this.optionTexts.length; i++) {
@@ -214,7 +214,7 @@ Events.Selection = class {
     
                 this.selectionGraphics.x = this.optionTexts[this.selection].x - 6;
                 this.selectionGraphics.y = this.optionTexts[this.selection].y + this.optionTexts[this.selection].height + 2;
-            } else if (keyPressed.ArrowUp) {
+            } else if (keyPressed.ArrowUp || gamepadButtonPressed[12] || (Math.sqrt(Math.pow(gamepadAxesPrev[0], 2) + Math.pow(gamepadAxesPrev[1], 2)) < 0.5 && Math.sqrt(Math.pow(gamepadAxes[0], 2) + Math.pow(gamepadAxes[1], 2)) >= 0.5 && Math.clamp(Math.rad2deg(Math.atan2(gamepadAxes[1], gamepadAxes[0])), 45, 135) == Math.rad2deg(Math.atan2(gamepadAxes[1], gamepadAxes[0])))) {
                 this.selection = Math.modulo(this.selection - 1, this.args.options.length);
     
                 for (var i=0; i<this.optionTexts.length; i++) {

@@ -40,7 +40,7 @@ app.stage.addChild(gui);
 var keyDown = {}, keyPressed = {}, keyReleased = {};
 var gamepads = [], needsGamepadScan = false;
 var gamepadButtonDown = {}, gamepadButtonPressed = {}, gamepadButtonReleased = {};
-var gamepadAxes = [];
+var gamepadAxes = [], gamepadAxesPrev = [];
 
 function init(loader, resources) {
     if (dataJSON.gui.fonts.ascii) fonts.ascii = Spritesheet.cut(resources[dataJSON.gui.fonts.ascii].texture, 16, 8);
@@ -121,6 +121,7 @@ function update(delta) {
     for (var key in keyReleased) {keyReleased[key] = false;}
     for (var button in gamepadButtonPressed) {gamepadButtonPressed[button] = false;}
     for (var button in gamepadButtonReleased) {gamepadButtonReleased[button] = false;}
+    gamepadAxesPrev = gamepadAxes.slice();
 
     viewport.children.sort(zSort);
 }
@@ -175,5 +176,6 @@ function updateGamepadInputs() {
         }
     }
     gamepadAxes = gamepads[0].axes;
+    console.log(Math.rad2deg(Math.atan2(gamepadAxes[1], gamepadAxes[0])));
     gamepadButtonDown = _gamepadButtonDown;
 }

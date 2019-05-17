@@ -23,6 +23,14 @@ Math.modulo = function(a, b) {
     return ((a%b)+b)%b;
 };
 
+Math.deg2rad = function(degrees) {
+    return degrees * Math.PI / 180;
+}
+
+Math.rad2deg = function(radians) {
+    return (radians / Math.PI * 180) + 180;
+}
+
 class BitmapText extends PIXI.Graphics {
     constructor(text, wrapWidth, tint=0xffffff) {
         super();
