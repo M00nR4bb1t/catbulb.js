@@ -200,7 +200,10 @@ Events.Selection = class {
                 }
             }
 
-            if (keyPressed.ArrowDown || gamepadButtonPressed[13] || (Math.sqrt(Math.pow(gamepadAxesPrev[0], 2) + Math.pow(gamepadAxesPrev[1], 2)) < 0.5 && Math.sqrt(Math.pow(gamepadAxes[0], 2) + Math.pow(gamepadAxes[1], 2)) >= 0.5 && Math.clamp(Math.rad2deg(Math.atan2(gamepadAxes[1], gamepadAxes[0])), 225, 315) == Math.rad2deg(Math.atan2(gamepadAxes[1], gamepadAxes[0])))) {
+            var axisLengthPrev = Math.sqrt(Math.pow(gamepadAxesPrev[0], 2) + Math.pow(gamepadAxesPrev[1], 2));
+            var axisLength = Math.sqrt(Math.pow(gamepadAxes[0], 2) + Math.pow(gamepadAxes[1], 2));
+            var axisDir = Math.rad2deg(Math.atan2(gamepadAxes[1], gamepadAxes[0]));
+            if (keyPressed.ArrowDown || gamepadButtonPressed[13] || (axisLengthPrev < 0.5 && axisLength >= 0.5 && axisDir >= 225 && axisDir <= 315)) {
                 this.selection = Math.modulo(this.selection + 1, this.args.options.length);
     
                 for (var i=0; i<this.optionTexts.length; i++) {
@@ -214,7 +217,7 @@ Events.Selection = class {
     
                 this.selectionGraphics.x = this.optionTexts[this.selection].x - 6;
                 this.selectionGraphics.y = this.optionTexts[this.selection].y + this.optionTexts[this.selection].height + 2;
-            } else if (keyPressed.ArrowUp || gamepadButtonPressed[12] || (Math.sqrt(Math.pow(gamepadAxesPrev[0], 2) + Math.pow(gamepadAxesPrev[1], 2)) < 0.5 && Math.sqrt(Math.pow(gamepadAxes[0], 2) + Math.pow(gamepadAxes[1], 2)) >= 0.5 && Math.clamp(Math.rad2deg(Math.atan2(gamepadAxes[1], gamepadAxes[0])), 45, 135) == Math.rad2deg(Math.atan2(gamepadAxes[1], gamepadAxes[0])))) {
+            } else if (keyPressed.ArrowUp || gamepadButtonPressed[12] || (axisLengthPrev < 0.5 && axisLength >= 0.5 && axisDir >= 45 && axisDir <= 135)) {
                 this.selection = Math.modulo(this.selection - 1, this.args.options.length);
     
                 for (var i=0; i<this.optionTexts.length; i++) {

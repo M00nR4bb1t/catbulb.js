@@ -42,7 +42,8 @@ class Player extends Entity {
             }
             
             if (this.vel.len() > 0) {
-                this.vel.normalize().scale((keyDown.LeftShift || gamepadButtonDown[2])? this.dashSpeed:this.walkSpeed, (keyDown.LeftShift || gamepadButtonDown[2])? this.dashSpeed:this.walkSpeed);
+                var _speed = (keyDown.ShiftLeft || gamepadButtonDown[2])? this.dashSpeed:this.walkSpeed;
+                this.vel.normalize().scale(_speed, _speed);
             }
         }
 
