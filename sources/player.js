@@ -18,7 +18,8 @@ class Player extends Entity {
             new SAT.V(-16, 0)
         ]);
         
-        this.speed = 2.5;
+        this.walkSpeed = 2.5;
+        this.dashSpeed = 5;
         this.paralyzed = false;
         this.searched = new Map();
     }
@@ -41,7 +42,7 @@ class Player extends Entity {
             }
             
             if (this.vel.len() > 0) {
-                this.vel.normalize().scale(this.speed, this.speed);
+                this.vel.normalize().scale((keyDown.LeftShift || gamepadButtonDown[2])? this.dashSpeed:this.walkSpeed, (keyDown.LeftShift || gamepadButtonDown[2])? this.dashSpeed:this.walkSpeed);
             }
         }
 
