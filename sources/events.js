@@ -328,6 +328,130 @@ Events.MapChange = class {
     }
 }
 
+Events.Delay = class {
+    constructor(args) {
+        this.args = args;
+    }
+
+    play(eventPlayer) {
+        this.eventPlayer = eventPlayer;
+        this.time = this.args.frameDuration;
+        needsUpdate.push(this);
+    }
+
+    update(delta) {
+        this.time -= delta;
+        if (this.time < 0) {
+            needsUpdate.remove(this);
+            this.eventPlayer.next();
+        }
+    }
+}
+
+Events.MovePlayer = class {
+    constructor(args) {
+        this.args = args;
+    }
+
+    play(eventPlayer) {
+        this.eventPlayer = eventPlayer;
+        this.time = this.args.frameDuration;
+        needsUpdate.push(this);
+    }
+
+    update(delta) {
+        this.time -= delta;
+    
+        var _speed = this.args.dash? player.dashSpeed:player.walkSpeed;
+        var _direction = Math.deg2rad(this.args.direction);
+        player.vel.x = _speed * Math.cos(_direction);
+        player.vel.y = _speed * -Math.sin(_direction);
+
+        if (this.time < 0) {
+            player.vel.x = 0;
+            player.vel.y = 0;
+            needsUpdate.remove(this);
+            this.eventPlayer.next();
+        }
+    }
+}
+
+Events.SetVariable = class {
+    constructor(args) {
+        this.args = args;
+    }
+
+    play(trigger) {
+        variables[this.args.variable] = this.args.value;
+        trigger.next();
+    }
+}
+
+Events.Picture = class {
+    constructor(args) {
+        this.sprite = new PIXI.Sprite(resources[args.path].texture);
+        this.sprite.anchor.set(0.5, 0.5);
+        this.sprite.x = width * (args.hasOwnProperty('x')? args.x:0.5);
+        this.sprite.y = height * (args.hasOwnProperty('y')? args.y:0.5);
+        variables[args.hasOwnProperty('variable')? args.variable:'_picture'] = this.sprite;
+    }
+
+    play(trigger) {
+        gui.addChild(this.sprite);
+        trigger.next();
+    }
+}
+
+Events.RemovePicture = class {
+    constructor(args) {
+        this.args = args;
+    }
+
+    play(trigger) {
+        gui.removeChild(variables[this.args.hasOwnProperty('variable')? this.args.variable:'_picture']);
+        trigger.next();
+    }
+}
+
+Events.SoundEffect = class {
+    constructor(args) {
+        this.args = args;
+    }
+
+    play(trigger) {
+        var sound = variables[this.args.hasOwnProperty('variable')? this.args.variable:'_soundEffect'] = resources[this.args.path].sound.play();
+        if (this.args.async) {
+            trigger.next();
+        } else {
+            sound.on('end', function() {
+                trigger.next();
+            });
+        }
+    }
+}
+
+Events.StopSound = class {
+    constructor(args) {
+        this.args = args;
+    }
+
+    play(trigger) {
+        variables[this.args.hasOwnProperty('variable')? this.args.variable:'_soundEffect'].stop();
+        trigger.next();
+    }
+}
+
+Events.Code = class {
+    constructor(args) {
+        this.args = args;
+    }
+
+    play(trigger) {
+        eval(this.args.code);
+        trigger.next();
+    }
+}
+
 Events.AddFilter = class {
     constructor(args) {
         this.args = args;

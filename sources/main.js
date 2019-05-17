@@ -28,6 +28,8 @@ PIXI.Loader.shared.load(init);
 var fonts = {}, filters = {};
 var tilesets = {}, maps = {};
 var map, solids = [], eventPlayers = [], triggers = [];
+
+var resources, variables = {};
 var needsUpdate = [];
 var player;
 
@@ -42,7 +44,9 @@ var gamepads = [], needsGamepadScan = false;
 var gamepadButtonDown = {}, gamepadButtonPressed = {}, gamepadButtonReleased = {};
 var gamepadAxes = [], gamepadAxesPrev = [];
 
-function init(loader, resources) {
+function init(loader, _resources) {
+    resources = _resources;
+
     if (dataJSON.gui.fonts.ascii) fonts.ascii = Spritesheet.cut(resources[dataJSON.gui.fonts.ascii].texture, 16, 8);
     if (dataJSON.gui.fonts.kr) fonts.kr = Spritesheet.cut(resources[dataJSON.gui.fonts.kr].texture, 32, 16);
 
@@ -57,7 +61,7 @@ function init(loader, resources) {
     for (var key in dataJSON.events) {
         var events = [];
         for (var i=0; i<dataJSON.events[key].length; i++) {
-            events[i] = new Events[dataJSON.events[key][i].type](dataJSON.events[key][i].arguments);
+            events[i] = new Events[dataJSON.events[key][i].type](dataJSON.events[key][i].arguments || {});
         }
         eventPlayers[key] = new EventPlayer(events);
     }

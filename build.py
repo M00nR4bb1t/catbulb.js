@@ -19,6 +19,9 @@ if (args.includeDependencies):
     str += codecs.open("pixi.min.js", encoding="utf-8", mode="r").read()
     str += "\n"
     print('Loaded pixi.min.js')
+    str += codecs.open("pixi-sound.js", encoding="utf-8", mode="r").read()
+    str += "\n"
+    print('Loaded pixi-sound.js')
     str += codecs.open("SAT.min.js", encoding="utf-8", mode="r").read()
     str += "\n"
     print('Loaded SAT.min.js')

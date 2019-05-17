@@ -158,7 +158,7 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":64,
+                 "width":32,
                  "x":256,
                  "y":96
                 }, 
@@ -183,6 +183,17 @@
                  "width":32,
                  "x":224,
                  "y":96
+                }, 
+                {
+                 "height":22,
+                 "id":44,
+                 "name":"refrigerator",
+                 "rotation":0,
+                 "type":"trigger,solid",
+                 "visible":true,
+                 "width":32,
+                 "x":288,
+                 "y":96
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -191,10 +202,10 @@
          "y":0
         }],
  "nextlayerid":4,
- "nextobjectid":44,
+ "nextobjectid":45,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"2019.04.25",
+ "tiledversion":"1.2.2",
  "tileheight":32,
  "tilesets":[
         {

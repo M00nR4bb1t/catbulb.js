@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="2019.04.25" orientation="orthogonal" renderorder="right-down" width="15" height="9" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="44">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="15" height="9" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="45">
  <tileset firstgid="1" name="indoors" tilewidth="32" tileheight="32" tilecount="64" columns="8">
   <image source="../tilesets/indoors.png" width="256" height="256"/>
  </tileset>
@@ -41,8 +41,9 @@
   <object id="34" name="kitchenHole" type="trigger,solid" x="294" y="176" width="18" height="36"/>
   <object id="37" x="64" y="160" width="32" height="32"/>
   <object id="40" x="192" y="96" width="32" height="22"/>
-  <object id="41" x="256" y="96" width="64" height="22"/>
+  <object id="41" x="256" y="96" width="32" height="22"/>
   <object id="42" name="sink" type="trigger,solid" x="160" y="96" width="32" height="22"/>
   <object id="43" name="stove" type="trigger,solid" x="224" y="96" width="32" height="22"/>
+  <object id="44" name="refrigerator" type="trigger,solid" x="288" y="96" width="32" height="22"/>
  </objectgroup>
 </map>
