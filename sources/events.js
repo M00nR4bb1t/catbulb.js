@@ -103,41 +103,60 @@ Events.Selection = class {
         this.graphics.x = 0;
         this.container.addChild(this.graphics);
 
-        this.graphics.beginFill(0xffffc9);
-        this.graphics.drawRect(0, 0, this.width, this.height);
-        this.graphics.endFill();
-
-        this.graphics.beginFill(0x004d4d);
-        this.graphics.drawRect(2, 2, this.width - 4, this.height - 4);
-        this.graphics.endFill();
-
-        this.messageText = new BitmapText('', this.width - 12);
-        this.messageText.x = 6;
-        this.messageText.y = 8;
-        this.container.addChild(this.messageText);
+        if (this.args.message) {
+            this.messageText = new BitmapText('', this.width - 12);
+            this.messageText.x = 6;
+            this.messageText.y = 8;
+            this.container.addChild(this.messageText);
+        }
 
         this.optionTexts = [];
-        this.optionWidth = Math.floor(this.width / 3);
-        var y = 0;
+        this.optionWidth = (this.args.message || this.args.name)? Math.floor(this.width / 3):Math.floor(this.width / 5 * 2);
+        var y = (this.args.message || this.args.name)? 0:(this.height - 4);
         for (var i=this.args.options.length - 1; i>=0; i--) {
             this.optionTexts[i] = new BitmapText(this.args.options[i].text, this.optionWidth - 12, 0xcccccc);
-            this.optionTexts[i].x = this.width - this.optionWidth + 6;
+            this.optionTexts[i].x = Math.floor((this.width - this.optionWidth) / ((this.args.message || this.args.name)? 1:2)) + 6;
             y -= this.optionTexts[i].height + 6;
             this.optionTexts[i].y = y;
             y -= 4;
             this.container.addChild(this.optionTexts[i]);
 
             this.graphics.beginFill(0x004d4d);
-            this.graphics.drawRect(this.width - this.optionWidth, y, this.optionWidth, this.optionTexts[i].height + 8);
+            this.graphics.drawRect((this.width - this.optionWidth) / ((this.args.message || this.args.name)? 1:2), y, this.optionWidth, this.optionTexts[i].height + 8);
             this.graphics.endFill();
         }
 
         this.selectionGraphics = new PIXI.Graphics();
         this.container.addChild(this.selectionGraphics);
-        
-        this.selectionGraphics.beginFill(0xffffc9);
-        this.selectionGraphics.drawRect(0, 0, this.optionWidth, 2);
-        this.selectionGraphics.endFill();
+
+        if (this.args.message || this.args.name) {
+            this.graphics.beginFill(0xffffc9);
+            this.graphics.drawRect(0, 0, this.width, this.height);
+            this.graphics.endFill();
+
+            this.graphics.beginFill(0x004d4d);
+            this.graphics.drawRect(2, 2, this.width - 4, this.height - 4);
+            this.graphics.endFill();
+
+            this.selectionGraphics.beginFill(0xffffc9);
+            this.selectionGraphics.drawRect(0, this.optionTexts[0].height + 6, this.optionWidth, 2);
+            this.selectionGraphics.endFill();
+        } else {
+            this.graphics.beginFill(0xffffc9);
+            this.graphics.drawRect((this.width - this.optionWidth) / 2 - 6, y - 6, this.optionWidth + 12, this.height - y + 6);
+            this.graphics.endFill();
+
+            this.graphics.beginFill(0x004d4d);
+            this.graphics.drawRect((this.width - this.optionWidth) / 2 - 4, y - 4, this.optionWidth + 8, this.height - y + 2);
+            this.graphics.endFill();
+
+            this.selectionGraphics.beginFill(0xffffc9);
+            this.selectionGraphics.drawRect(0, 0, this.optionWidth, 2);
+            this.selectionGraphics.drawRect(0, this.optionTexts[0].height + 6, this.optionWidth, 2);
+            this.selectionGraphics.drawRect(0, 0, 2, this.optionTexts[0].height + 6);
+            this.selectionGraphics.drawRect(this.optionWidth - 2, 0, 2, this.optionTexts[0].height + 6);
+            this.selectionGraphics.endFill();
+        }
 
         if (this.args.name) {
             this.nameText = new BitmapText(this.args.name, this.width - 12);
@@ -160,9 +179,9 @@ Events.Selection = class {
         this.optionTexts[this.selection].tint = 0xffffff;
         this.optionTexts[this.selection].redraw();
         this.selectionGraphics.x = this.optionTexts[this.selection].x - 6;
-        this.selectionGraphics.y = this.optionTexts[this.selection].y + this.optionTexts[this.selection].height + 2;
+        this.selectionGraphics.y = this.optionTexts[this.selection].y - 4;
         
-        this.messageText.text = '';
+        if (this.args.message) this.messageText.text = '';
         gui.addChild(this.container);
         needsUpdate.push(this);
     }
@@ -175,7 +194,11 @@ Events.Selection = class {
                 if (this.args.options[this.selection].events) {
                     this.eventPlayer.callback = null;
                     this.eventPlayer.forceFinish();
-                    this.eventPlayer.trigger.play(0, eventPlayers[this.args.options[this.selection].events]);
+                    if (this.eventPlayer.trigger) {
+                        this.eventPlayer.trigger.play(0, eventPlayers[this.args.options[this.selection].events]);
+                    } else {
+                        eventPlayers[this.args.options[this.selection].events].play();
+                    }
                 } else {
                     this.eventPlayer.next();
                 }
@@ -183,7 +206,7 @@ Events.Selection = class {
 
             this.time -= delta;
         } else {
-            if (this.time % ((keyDown.KeyX || gamepadButtonDown[1])? 1:3) < 1 && this.messageText.text != this.args.message) {
+            if (this.args.message && this.time % ((keyDown.KeyX || gamepadButtonDown[1])? 1:3) < 1 && this.messageText.text != this.args.message) {
                 this.reveal++;
                 if (this.args.message.charAt(this.reveal - 1) == '§') {
                     this.reveal += this.args.message.substr(this.reveal).match(/{.*?}/g)[0].length;
@@ -192,7 +215,7 @@ Events.Selection = class {
             }
             
             if (this.time > 0 && (keyPressed.KeyZ || gamepadButtonPressed[0])) {
-                if (this.messageText.text != this.args.message) {
+                if (this.args.message && this.messageText.text != this.args.message) {
                     this.messageText.text = this.args.message;
                 } else {
                     this.time = 7;
@@ -216,7 +239,7 @@ Events.Selection = class {
                 }
     
                 this.selectionGraphics.x = this.optionTexts[this.selection].x - 6;
-                this.selectionGraphics.y = this.optionTexts[this.selection].y + this.optionTexts[this.selection].height + 2;
+                this.selectionGraphics.y = this.optionTexts[this.selection].y - 4;
             } else if (keyPressed.ArrowUp || gamepadButtonPressed[12] || (axisLengthPrev < 0.5 && axisLength >= 0.5 && axisDir >= 45 && axisDir <= 135)) {
                 this.selection = Math.modulo(this.selection - 1, this.args.options.length);
     
@@ -230,18 +253,18 @@ Events.Selection = class {
                 }
     
                 this.selectionGraphics.x = this.optionTexts[this.selection].x - 6;
-                this.selectionGraphics.y = this.optionTexts[this.selection].y + this.optionTexts[this.selection].height + 2;
+                this.selectionGraphics.y = this.optionTexts[this.selection].y - 4;
             }
 
             this.time += delta;
         }
 
         this.container.y = Math.floor(height - (Math.pow(Math.min(this.time / 7, 1) - 1, 3) + 1) * this.height * 1.25);
-        this.messageText.redraw();
+        if (this.args.message) this.messageText.redraw();
         for (var optionText of this.optionTexts) {
             optionText.redraw();
         }
-        this.nameText.redraw();
+        if (this.args.message && this.args.name) this.nameText.redraw();
     }
 }
 
@@ -264,15 +287,25 @@ Events.MapChange = class {
 
     play(eventPlayer) {
         this.eventPlayer = eventPlayer;
-        map.remove();
+        
+        if (player) {
+            if (this.args.x != undefined) {
+                player.pos.x = player.container.x = this.args.x;
+            }
+            if (this.args.y != undefined) {
+                player.pos.y = player.container.y = this.args.y;
+            }
+            player.mask.pos = player.pos;
+        } else {
+            player = new Player(new SAT.V(this.args.x, this.args.y), Spritesheet.cut(resources['assets/sprites/player_idle.png'].texture, 2, 1), Spritesheet.cut(resources['assets/sprites/player_walk.png'].texture, 4, 1));
+            player.addTo(viewport);
+        }
+
+        if (map) map.remove();
         (map = maps[this.args.map]).addTo(viewport);
-        if (this.args.x != undefined) {
-            player.pos.x = this.args.x;
-        }
-        if (this.args.y != undefined) {
-            player.pos.y = this.args.y;
-        }
-        player.mask.pos = player.pos;
+
+        camera.follow(player);
+        
         var response = new SAT.Response();
         for (var i=0; i<eventPlayers.length; i++) {
             if (SAT.testPolygonPolygon(player.mask, eventPlayers[i].mask, response) && response.overlap > 0) {
@@ -389,15 +422,16 @@ Events.SetVariable = class {
 
 Events.Picture = class {
     constructor(args) {
-        this.sprite = new PIXI.Sprite(resources[args.path].texture);
+        this.args = args;
+        this.sprite = new PIXI.Sprite(resources[this.args.path].texture);
         this.sprite.anchor.set(0.5, 0.5);
-        this.sprite.x = width * (args.hasOwnProperty('x')? args.x:0.5);
-        this.sprite.y = height * (args.hasOwnProperty('y')? args.y:0.5);
-        variables[args.hasOwnProperty('variable')? args.variable:'_picture'] = this.sprite;
+        this.sprite.x = width * (this.args.hasOwnProperty('x')? this.args.x:0.5);
+        this.sprite.y = height * (this.args.hasOwnProperty('y')? this.args.y:0.5);
     }
 
     play(trigger) {
         gui.addChild(this.sprite);
+        variables[this.args.hasOwnProperty('variable')? args.variable:'_picture'] = this.sprite;
         trigger.next();
     }
 }
@@ -410,6 +444,28 @@ Events.RemovePicture = class {
     play(trigger) {
         gui.removeChild(variables[this.args.hasOwnProperty('variable')? this.args.variable:'_picture']);
         trigger.next();
+    }
+}
+
+Events.FadeOutPicture = class {
+    constructor(args) {
+        this.args = args;
+    }
+
+    play(eventPlayer) {
+        this.eventPlayer = eventPlayer;
+        this.time = this.args.frameDuration;
+        needsUpdate.push(this);
+    }
+
+    update(delta) {
+        this.time -= delta;
+        variables[this.args.hasOwnProperty('variable')? this.args.variable:'_picture'].alpha = this.time / this.args.frameDuration;
+
+        if (variables[this.args.hasOwnProperty('variable')? this.args.variable:'_picture'].alpha < 0) {
+            needsUpdate.remove(this);
+            this.eventPlayer.next();
+        }
     }
 }
 

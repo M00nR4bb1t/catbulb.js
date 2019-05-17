@@ -97,10 +97,7 @@ function init(loader, _resources) {
         maps[dataJSON.maps[i].name] = new TileMap(dataJSON.maps[i].hasOwnProperty('displayName')? dataJSON.maps[i].displayName:dataJSON.maps[i].name, tileLayers, mapJSON.width, mapJSON.height, tilesets[dataJSON.maps[i].tileset], _solids, _triggers);
     }
     
-    (map = maps['kitchen']).addTo(viewport);
-    
-    player = new Player(new SAT.V(224, 160), Spritesheet.cut(resources['assets/sprites/player_idle.png'].texture, 2, 1), Spritesheet.cut(resources['assets/sprites/player_walk.png'].texture, 4, 1));
-    player.addTo(viewport);
+    eventPlayers._gameStart.play();
 
     document.addEventListener('keydown', e => onKeyDown(e));
     document.addEventListener('keyup', e => onKeyUp(e));
@@ -115,11 +112,9 @@ function init(loader, _resources) {
 
 function update(delta) {
     updateGamepadInputs();
-    player.update(delta);
     for (var elem of needsUpdate) {
         elem.update(delta);
     }
-    camera.follow(player);
 
     for (var key in keyPressed) {keyPressed[key] = false;}
     for (var key in keyReleased) {keyReleased[key] = false;}
@@ -180,6 +175,5 @@ function updateGamepadInputs() {
         }
     }
     gamepadAxes = gamepads[0].axes;
-    console.log(Math.rad2deg(Math.atan2(gamepadAxes[1], gamepadAxes[0])));
     gamepadButtonDown = _gamepadButtonDown;
 }

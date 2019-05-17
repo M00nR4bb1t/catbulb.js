@@ -91,8 +91,8 @@
                  "rotation":0,
                  "type":"trigger",
                  "visible":true,
-                 "width":32,
-                 "x":352,
+                 "width":16,
+                 "x":368,
                  "y":160
                 }, 
                 {
@@ -139,7 +139,7 @@
  "nextobjectid":20,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"2019.04.25",
+ "tiledversion":"1.2.2",
  "tileheight":32,
  "tilesets":[
         {

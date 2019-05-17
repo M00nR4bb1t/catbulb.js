@@ -73,6 +73,16 @@ var dataJSON = {
 
     // Events
     "events": {
+        "_gameStart": [
+            {"type":"Picture", "arguments":{"path":"assets/pictures/spaghetti.jpg"}},
+            {"type":"Selection", "arguments":{"options":[{"text":"New Game", "events":"newGame"}, {"text":"Continue"}, {"text":"Shutdown"}]}}
+        ],
+        "newGame": [
+            {"type":"FadeOutPicture", "arguments":{"frameDuration":30}},
+            {"type":"Delay", "arguments":{"frameDuration":30}},
+            {"type":"MapChange", "arguments":{"map":"kitchen", "x":224, "y":160}}
+        ],
+
         "doorOut": [
             {"type":"Selection", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"Go out?", "options":[{"text":"Yes", "events":"goOut"}, {"text":"No"}]}}
         ],
@@ -117,7 +127,7 @@ var dataJSON = {
             {"type":"Message", "arguments":{"name":"Fireplace", "message":"§{\"shake\":2}Oh, I can also play songs for you!"}},
             {"type":"Delay", "arguments":{"frameDuration":90}},
             {"type":"SoundEffect", "arguments":{"path":"assets/se/twinkle.wav", "async":true}},
-            {"type":"Delay", "arguments":{"frameDuration":150}},
+            {"type":"Delay", "arguments":{"frameDuration":153}},
             {"type":"StopSound"},
             {"type":"Message", "arguments":{"name":"Fireplace", "message":"§{\"shake\":2}Actually, you know what, I don't really like that song. Forget it."}}
         ],

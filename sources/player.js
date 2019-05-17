@@ -10,6 +10,8 @@ class Player extends Entity {
         this.sprite.animationSpeed = 0.05;
         this.sprite.play();
         this.container.addChild(this.sprite);
+        this.container.x = position.x;
+        this.container.y = position.y;
 
         this.mask = new SAT.Polygon(new SAT.V(0, 0), [
             new SAT.V(-16, -16),
@@ -22,6 +24,8 @@ class Player extends Entity {
         this.dashSpeed = 5;
         this.paralyzed = false;
         this.searched = new Map();
+
+        needsUpdate.push(this);
     }
 
     update(delta) {
@@ -42,7 +46,7 @@ class Player extends Entity {
             }
             
             if (this.vel.len() > 0) {
-                var _speed = (keyDown.ShiftLeft || gamepadButtonDown[2])? this.dashSpeed:this.walkSpeed;
+                var _speed = (keyDown.ShiftLeft || gamepadButtonDown[6] > 0.5)? this.dashSpeed:this.walkSpeed;
                 this.vel.normalize().scale(_speed, _speed);
             }
         }
@@ -84,5 +88,7 @@ class Player extends Entity {
         }
 
         this.updateContainerPosition();
+
+        camera.follow(this);
     }
 }
