@@ -1,18 +1,20 @@
 class Camera {
     constructor(container) {
         this.container = container;
+        this._zoom = 1;
     }
 
     setPosition(x, y) {
-        this.container.x = -(x - width / 2);
-        this.container.y = -(y - height / 2);
+        this.container.x = Math.clamp((-x * this._zoom) + (width / 2), -map.graphics.width * this._zoom + width, 0);
+        this.container.y = Math.clamp((-y * this._zoom) + (height / 2), -map.graphics.height * this._zoom + height, 0);
     }
 
     setZoom(zoom) {
         this.container.scale.set(zoom, zoom);
+        this._zoom = zoom;
     }
 
     follow(target) {
-        this.setPosition(Math.clamp(target.container.x, width / 2, map.graphics.width - width / 2), Math.clamp(target.container.y, height / 2, map.graphics.height - height / 2));
+        this.setPosition(target.container.x, target.container.y);
     }
 }

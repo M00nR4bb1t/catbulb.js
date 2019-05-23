@@ -5,6 +5,7 @@ var Spritesheet = {
         for (var j=0; j<rows; j++) {
             for (var i=0; i<columns; i++) {
                 output[j * columns + i] = new PIXI.Texture(baseTexture, new PIXI.Rectangle(i * cellWidth, j * cellHeight, cellWidth, cellHeight));
+                output[j * columns + i].baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
             }
         }
         return output;
