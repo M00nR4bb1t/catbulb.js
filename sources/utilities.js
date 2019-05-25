@@ -5,7 +5,6 @@ var Spritesheet = {
         for (var j=0; j<rows; j++) {
             for (var i=0; i<columns; i++) {
                 output[j * columns + i] = new PIXI.Texture(baseTexture, new PIXI.Rectangle(i * cellWidth, j * cellHeight, cellWidth, cellHeight));
-                output[j * columns + i].baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
             }
         }
         return output;
@@ -33,23 +32,52 @@ Math.rad2deg = function(radians) {
 }
 
 class BitmapText extends PIXI.Graphics {
-    constructor(text, wrapWidth, tint=0xffffff) {
+    constructor(text, wrapWidth, tint=0xffffff, reveal=-1) {
         super();
         this.text = text;
         this.wrapWidth = wrapWidth;
         this.tint = tint;
+        this.reveal = reveal;
         this.redraw();
+    }
+
+    set text(text) {
+        this._text = text;
+        var ind = 0;
+        for (var i=0; i<text.length; i++) {
+            var charCode = text.charCodeAt(i);
+            if (charCode == 10) {
+                ind++;
+            } else if (charCode == 167 && text.length > i + 1 && text.charCodeAt(i + 1) == 123) {
+                continue;
+            } else if (charCode < 128) {
+                ind++;
+            } else if (charCode >= 0xac00 && charCode <= 0xd7a3) {
+                ind++;
+            }
+        }
+        this.realLength = ind;
+    }
+
+    get text() {
+        return this._text;
     }
 
     redraw() {
         this.clear();
         var x = 0, y = 0;
         var shake = 0, tint = this.tint;
+        var ind = 0;
         for (var i=0; i<this.text.length; i++) {
+            if (ind == this.reveal) {
+                break;
+            }
+
             var charCode = this.text.charCodeAt(i);
             if (charCode == 10) {
                 y += charHeight;
                 x = 0;
+                ind++;
             } else if (charCode == 167 && this.text.length > i + 1 && this.text.charCodeAt(i + 1) == 123) {
                 var JSONString = this.text.substr(i + 1).match(/{.*?}/g)[0];
                 var JSONData = JSON.parse(JSONString);
@@ -81,6 +109,7 @@ class BitmapText extends PIXI.Graphics {
                 this.drawRect(x, y + shakeOffset, charWidth, charHeight);
                 this.endFill();
                 x += charWidth;
+                ind++;
             } else if (charCode >= 0xac00 && charCode <= 0xd7a3) {
                 var charWidth = fonts.kr[0].width, charHeight = fonts.kr[0].height;
                 var nextWord = this.text.substr(i).match(/ .*?(?=(?: |$))/g);
@@ -146,6 +175,7 @@ class BitmapText extends PIXI.Graphics {
                 this.drawRect(x, y + shakeOffset, charWidth, charHeight);
                 this.endFill();
                 x += charWidth;
+                ind++;
             }
         }
     }

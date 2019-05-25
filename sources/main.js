@@ -5,6 +5,13 @@ var width = 480, height = 270; // The size of the Application
 var gridWidth = 32, gridHeight = 32; // The width and height of the grid
 
 /**
+ * PIXI Settings
+ */
+
+// PIXI.settings.ROUND_PIXELS = true;
+PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+
+/**
  * Create the Application
  */
 var app = new PIXI.Application({

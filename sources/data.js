@@ -75,65 +75,72 @@ var dataJSON = {
     "events": {
         "_gameStart": [
             {"type":"Picture", "arguments":{"path":"assets/pictures/spaghetti.jpg"}},
-            {"type":"Selection", "arguments":{"options":[{"text":"New Game", "events":"newGame"}, {"text":"Continue"}, {"text":"Shutdown"}]}}
+            {"type":"ShowChoices", "arguments":{"options":[{"text":"New Game", "events":"newGame"}, {"text":"Continue"}, {"text":"Shutdown"}]}}
         ],
         "newGame": [
             {"type":"FadeOutPicture", "arguments":{"frameDuration":30}},
-            {"type":"Delay", "arguments":{"frameDuration":30}},
+            {"type":"Delay", "arguments":{"frameDuration":60}},
+            {"type":"ShowText", "arguments":{"message":"Hey. It's me, Willy.", "y":0.5}},
+            {"type":"ShowText", "arguments":{"message":"I'm very ill. I have been for a long time.", "y":0.5}},
+            {"type":"ShowText", "arguments":{"message":"The only person I can depend on is you, you who've been a friend for so long.", "y":0.5}},
+            {"type":"ShowText", "arguments":{"message":"Could you please free me from all this suffering?", "y":0.5}},
+            {"type":"Delay", "arguments":{"frameDuration":120}},
             {"type":"MapChange", "arguments":{"map":"kitchen", "x":224, "y":160}}
         ],
 
         "doorOut": [
-            {"type":"Selection", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"Go out?", "options":[{"text":"Yes", "events":"goOut"}, {"text":"No"}]}}
+            {"type":"ShowText", "arguments":{"message":"The door leading outside."}},
+            {"type":"ShowChoices", "arguments":{"options":[{"text":"Go Out", "events":"goOut"}, {"text":"Stay"}]}}
         ],
         "goOut": [
             {"type":"MapChange", "arguments":{"map":"livingRoom", "x":367}},
             {"type":"AddFilter", "arguments":{"container":"viewport", "filter":"grayscale"}},
             {"type":"MovePlayer", "arguments":{"frameDuration":10, "direction":180}},
-            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"...the lights turned off."}}
+            {"type":"ShowText", "arguments":{"message":"...the lights turned off."}}
         ],
         "doorToKitchen": [
-            {"type":"Selection", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"Go into the kitchen?", "options":[{"text":"Yes", "events":"goToKitchen"}, {"text":"No"}]}}
+            {"type":"ShowText", "arguments":{"message":"The door leading to the kitchen."}},
+            {"type":"ShowChoices", "arguments":{"options":[{"text":"Enter", "events":"goToKitchen"}, {"text":"Stay"}]}}
         ],
         "goToKitchen": [
             {"type":"MapChange", "arguments":{"map":"kitchen", "x":113}},
             {"type":"MovePlayer", "arguments":{"frameDuration":10, "direction":0}}
         ],
         "sink": [
-            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"A kitchen sink."}},
+            {"type":"ShowText", "arguments":{"message":"A kitchen sink."}},
             {"type":"Delay", "arguments":{"frameDuration":60}},
-            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"...the faucet doesn't seem to work."}}
+            {"type":"ShowText", "arguments":{"message":"...the faucet doesn't seem to work."}}
         ],
         "stove": [
-            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"A gas stove."}},
-            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"§{\"shake\":1, \"tint\":16711680}Ow!§{\"shake\":0, \"tint\":16777215} It's still hot."}}
+            {"type":"ShowText", "arguments":{"message":"A gas stove."}},
+            {"type":"ShowText", "arguments":{"message":"§{\"shake\":1, \"tint\":16711680}Ow!§{\"shake\":0, \"tint\":16777215} It's still hot."}}
         ],
         "refrigerator": [
             {"type":"Picture", "arguments":{"path":"assets/pictures/spaghetti.jpg", "y":0.4}},
-            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"There's a bowl of spaghetti in the refrigerator."}},
+            {"type":"ShowText", "arguments":{"message":"There's a bowl of spaghetti in the refrigerator."}},
             {"type":"RemovePicture"}
         ],
         "kitchenHole": [
-            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"A big hole, around 2 meters in diameter."}},
-            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"§{\"shake\":3}...Woah!§{\"shake\":0} I almost fell down through the hole!"}}
+            {"type":"ShowText", "arguments":{"message":"A big hole, around 2 meters in diameter."}},
+            {"type":"ShowText", "arguments":{"message":"§{\"shake\":3}...Woah!§{\"shake\":0} I almost fell down through the hole!"}}
         ],
         "fireplace": [
-            {"type":"Message", "arguments":{"name":"Fireplace", "message":"§{\"shake\":2}Hi! I'm your friendly neighbourhood talking fireplace!"}},
-            {"type":"Message", "arguments":{"name":"Fireplace", "message":"§{\"shake\":2}I'm here to demonstrate Event.Code to you."}},
+            {"type":"ShowText", "arguments":{"message":"§{\"shake\":2}Hi! I'm your friendly neighbourhood talking fireplace!"}},
+            {"type":"ShowText", "arguments":{"message":"§{\"shake\":2}I'm here to demonstrate Event.Code to you."}},
             {"type":"Code", "arguments":{"code":"console.log('A warm hello from your friendly neighbourhood talking fireplace!');"}},
             {"type":"Delay", "arguments":{"frameDuration":90}},
-            {"type":"Message", "arguments":{"name":"Fireplace", "message":"§{\"shake\":2}Check the console!"}},
+            {"type":"ShowText", "arguments":{"message":"§{\"shake\":2}Check the console!"}},
             {"type":"Delay", "arguments":{"frameDuration":90}},
-            {"type":"Message", "arguments":{"name":"Fireplace", "message":"§{\"shake\":2}Oh, I can also play songs for you!"}},
+            {"type":"ShowText", "arguments":{"message":"§{\"shake\":2}Oh, I can also play songs for you!"}},
             {"type":"Delay", "arguments":{"frameDuration":90}},
             {"type":"SoundEffect", "arguments":{"path":"assets/se/twinkle.wav", "async":true}},
             {"type":"Delay", "arguments":{"frameDuration":153}},
             {"type":"StopSound"},
-            {"type":"Message", "arguments":{"name":"Fireplace", "message":"§{\"shake\":2}Actually, you know what, I don't really like that song. Forget it."}}
+            {"type":"ShowText", "arguments":{"message":"§{\"shake\":2}Actually, you know what, I don't really like that song. Forget it."}}
         ],
         "sofa": [
-            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"A couch."}},
-            {"type":"Message", "arguments":{"name":"§{\"tint\":\"#78a63e\"}Catbulb§{\"tint\":\"#ffffff\"}", "message":"Looks cozy."}}
+            {"type":"ShowText", "arguments":{"message":"A couch."}},
+            {"type":"ShowText", "arguments":{"message":"Looks cozy."}}
         ]
     }
 }
