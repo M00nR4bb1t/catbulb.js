@@ -6,39 +6,57 @@ Events.ShowText = class {
         
         this.width = Math.ceil(width / 5 * 3);
         this.height = Math.ceil(height / 3);
-        this.spring = (height - height * (this.args.hasOwnProperty('y')? this.args.y:0.775) + (this.height / 2));
+        this.halfWidth = Math.floor(this.width / 2);
+        this.halfHeight = Math.floor(this.height / 2);
         this.time = 0;
         this.reveal = 0;
         this.waning = false;
 
         this.container = new PIXI.Container();
-        this.container.x = Math.floor(width / 2 - this.width / 2);
+        this.container.pivot.x = this.halfWidth;
+        this.container.pivot.y = this.halfHeight;
+        this.container.x = Math.floor(width / 2);
+        this.container.y = Math.floor(height * (this.args.hasOwnProperty('y')? this.args.y:0.775));
 
         this.graphics = new PIXI.Graphics();
-        this.graphics.x = 0;
+        this.graphics.x = this.halfWidth;
+        this.graphics.y = this.halfHeight;
         this.container.addChild(this.graphics);
 
         this.graphics.beginFill(0xffffc9);
-        this.graphics.drawRect(0, 0, this.width, this.height);
+        this.graphics.drawRect(-this.halfWidth, -this.halfHeight, this.width, this.height);
         this.graphics.endFill();
 
         this.graphics.beginFill(0x004d4d);
-        this.graphics.drawRect(2, 2, this.width - 4, this.height - 4);
+        this.graphics.drawRect(-this.halfWidth + 2, -this.halfHeight + 2, this.width - 4, this.height - 4);
         this.graphics.endFill();
+
+        this.textContainer = new PIXI.Graphics();
+        this.container.addChild(this.textContainer);
+
+        this.mask = new PIXI.Sprite(PIXI.Texture.WHITE);
+        this.mask.anchor.y = 0.5;
+        this.mask.x = 2;
+        this.mask.y = this.halfHeight;
+        this.mask.width = this.width - 4;
+        this.textContainer.addChild(this.mask);
+        this.textContainer.mask = this.mask;
 
         this.messageText = new BitmapText(this.args.message, this.width - 12);
         this.messageText.x = 6;
         this.messageText.y = 8;
-        this.container.addChild(this.messageText);
+        this.textContainer.addChild(this.messageText);
     }
 
     play(eventPlayer) {
         this.eventPlayer = eventPlayer;
-        this.container.y = height;
+        this.graphics.scale.y = 0;
+        this.mask.height = 0;
         this.time = 0;
         this.waning = false;
         this.reveal = 0;
         this.messageText.reveal = 0;
+        this.messageText.redraw();
         gui.addChild(this.container);
         needsUpdate.push(this);
     }
@@ -69,7 +87,9 @@ Events.ShowText = class {
             this.time += delta;
         }
 
-        this.container.y = Math.floor(height - (Math.pow(Math.clamp(this.time / 10, 0, 1) - 1, 3) + 1) * this.spring);
+        var ease = Math.pow(Math.clamp(this.time / 10, 0, 1) - 1, 3) + 1;
+        this.graphics.scale.y = ease;
+        this.mask.height = Math.floor(ease * (this.height - 4));
         this.messageText.redraw();
     }
 }
@@ -78,53 +98,72 @@ Events.ShowChoices = class {
     constructor(args) {
         this.args = args;
         
-        this.width = Math.ceil(width / 5 * 3);
+        this.width = Math.ceil(width / 25 * 6);
+        this.halfWidth = Math.floor(this.width / 2);
         this.time = 0;
         this.waning = false;
 
         this.container = new PIXI.Container();
-        this.container.x = Math.floor(width / 2 - this.width / 2);
+        this.container.x = Math.floor(width / 2);
+        this.container.y = Math.floor(height * (this.args.hasOwnProperty('y')? this.args.y:0.775));
 
         this.graphics = new PIXI.Graphics();
         this.graphics.x = 0;
         this.container.addChild(this.graphics);
 
+        this.textContainer = new PIXI.Graphics();
+        this.container.addChild(this.textContainer);
+
+        this.mask = new PIXI.Sprite(PIXI.Texture.WHITE);
+        this.mask.anchor.y = 0.5;
+        this.mask.x = -4;
+        this.mask.width = this.width + 8;
+        this.textContainer.addChild(this.mask);
+        this.textContainer.mask = this.mask;
+
         this.optionTexts = [];
-        this.optionWidth = Math.floor(this.width / 5 * 2);
         var y = 6;
         for (var i=0; i<this.args.options.length; i++) {
-            this.optionTexts[i] = new BitmapText(this.args.options[i].text, this.optionWidth - 12, 0xcccccc);
-            this.optionTexts[i].x = Math.floor((this.width - this.optionWidth) / 2) + 6;
+            this.optionTexts[i] = new BitmapText(this.args.options[i].text, this.width - 12, 0xcccccc);
+            this.optionTexts[i].x = 6;
             y += 4;
             this.optionTexts[i].y = y;
             y += this.optionTexts[i].height + 6;
-            this.container.addChild(this.optionTexts[i]);
+            this.textContainer.addChild(this.optionTexts[i]);
         }
 
-        this.spring = (height - height * (this.args.hasOwnProperty('y')? this.args.y:0.775) + ((y + 4) / 2));
+        this.height = y + 4;
+        this.halfHeight = Math.floor(this.height / 2);
+        this.container.pivot.x = this.halfWidth;
+        this.container.pivot.y = this.halfHeight;
+        this.mask.y = this.halfHeight;
 
         this.selectionGraphics = new PIXI.Graphics();
-        this.container.addChild(this.selectionGraphics);
+        this.textContainer.addChild(this.selectionGraphics);
+
+        this.graphics.x = this.halfWidth;
+        this.graphics.y = this.halfHeight;
 
         this.graphics.beginFill(0xffffc9);
-        this.graphics.drawRect((this.width - this.optionWidth) / 2 - 6, 0, this.optionWidth + 12, y + 4);
+        this.graphics.drawRect(-this.halfWidth - 6, -this.halfHeight, this.width + 12, y + 4);
         this.graphics.endFill();
 
         this.graphics.beginFill(0x004d4d);
-        this.graphics.drawRect((this.width - this.optionWidth) / 2 - 4, 2, this.optionWidth + 8, y);
+        this.graphics.drawRect(-this.halfWidth - 4, -this.halfHeight + 2, this.width + 8, y);
         this.graphics.endFill();
 
         this.selectionGraphics.beginFill(0xffffc9);
-        this.selectionGraphics.drawRect(0, 0, this.optionWidth, 2);
-        this.selectionGraphics.drawRect(0, this.optionTexts[0].height + 6, this.optionWidth, 2);
+        this.selectionGraphics.drawRect(0, 0, this.width, 2);
+        this.selectionGraphics.drawRect(0, this.optionTexts[0].height + 6, this.width, 2);
         this.selectionGraphics.drawRect(0, 0, 2, this.optionTexts[0].height + 6);
-        this.selectionGraphics.drawRect(this.optionWidth - 2, 0, 2, this.optionTexts[0].height + 6);
+        this.selectionGraphics.drawRect(this.width - 2, 0, 2, this.optionTexts[0].height + 6);
         this.selectionGraphics.endFill();
     }
 
     play(eventPlayer) {
         this.eventPlayer = eventPlayer;
-        this.container.y = height;
+        this.graphics.scale.y = 0;
+        this.mask.height = 0;
         this.time = 0;
         this.waning = false;
         
@@ -200,7 +239,9 @@ Events.ShowChoices = class {
             this.time += delta;
         }
 
-        this.container.y = Math.floor(height - (Math.pow(Math.clamp(this.time / 10, 0, 1) - 1, 3) + 1) * this.spring);
+        var ease = Math.pow(Math.clamp(this.time / 10, 0, 1) - 1, 3) + 1;
+        this.graphics.scale.y = ease;
+        this.mask.height = Math.floor(ease * (this.height - 4));
         for (var optionText of this.optionTexts) {
             optionText.redraw();
         }
