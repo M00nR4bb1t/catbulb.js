@@ -32,7 +32,7 @@ PIXI.Loader.shared.load(init);
 /**
  * Main Game Logic
  */
-var fonts = {}, filters = {};
+var fonts = {}, nineslice = {}, filters = {};
 var tilesets = {}, maps = {};
 var map, solids = [], eventPlayers = [], triggers = [];
 
@@ -56,6 +56,13 @@ function init(loader, _resources) {
 
     if (dataJSON.gui.fonts.ascii) fonts.ascii = Spritesheet.cut(resources[dataJSON.gui.fonts.ascii].texture, 16, 8);
     if (dataJSON.gui.fonts.kr) fonts.kr = Spritesheet.cut(resources[dataJSON.gui.fonts.kr].texture, 32, 16);
+
+    for (var k in dataJSON.gui.nineslice) {
+        var v = dataJSON.gui.nineslice[k];
+        nineslice[k] = function() {
+            return new PIXI.NineSlicePlane(resources[v.path].texture, v.left, v.top, v.right, v.bottom);
+        }
+    }
 
     for (var i=0; i<dataJSON.filters.length; i++) {
         filters[dataJSON.filters[i].name] = new PIXI.Filter(dataJSON.filters[i].vertex? resources[dataJSON.filters[i].vertex].data:undefined, dataJSON.filters[i].fragment? resources[dataJSON.filters[i].fragment].data:undefined);

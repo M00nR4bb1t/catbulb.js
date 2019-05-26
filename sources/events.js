@@ -18,29 +18,14 @@ Events.ShowText = class {
         this.container.x = Math.floor(width / 2);
         this.container.y = Math.floor(height * (this.args.hasOwnProperty('y')? this.args.y:0.775));
 
-        this.graphics = new PIXI.Graphics();
-        this.graphics.x = this.halfWidth;
-        this.graphics.y = this.halfHeight;
-        this.container.addChild(this.graphics);
-
-        this.graphics.beginFill(0xffffc9);
-        this.graphics.drawRect(-this.halfWidth, -this.halfHeight, this.width, this.height);
-        this.graphics.endFill();
-
-        this.graphics.beginFill(0x004d4d);
-        this.graphics.drawRect(-this.halfWidth + 2, -this.halfHeight + 2, this.width - 4, this.height - 4);
-        this.graphics.endFill();
+        if (this.args.hasOwnProperty('background')) {
+            this.ns = nineslice[this.args.background]();
+            this.ns.width = this.width;
+            this.container.addChild(this.ns);
+        }
 
         this.textContainer = new PIXI.Graphics();
         this.container.addChild(this.textContainer);
-
-        this.mask = new PIXI.Sprite(PIXI.Texture.WHITE);
-        this.mask.anchor.y = 0.5;
-        this.mask.x = 2;
-        this.mask.y = this.halfHeight;
-        this.mask.width = this.width - 4;
-        this.textContainer.addChild(this.mask);
-        this.textContainer.mask = this.mask;
 
         this.messageText = new BitmapText(this.args.message, this.width - 12);
         this.messageText.x = 6;
@@ -50,8 +35,8 @@ Events.ShowText = class {
 
     play(eventPlayer) {
         this.eventPlayer = eventPlayer;
-        this.graphics.scale.y = 0;
-        this.mask.height = 0;
+        if (this.ns) this.ns.height = 0;
+        this.textContainer.visible = false;
         this.time = 0;
         this.waning = false;
         this.reveal = 0;
@@ -71,7 +56,7 @@ Events.ShowText = class {
 
             this.time -= delta;
         } else {
-            if (this.time % ((keyDown.KeyX || gamepadButtonDown[1])? 1:3) < 1 && this.messageText.reveal < this.messageText.realLength) {
+            if (this.time > 10 && this.time % ((keyDown.KeyX || gamepadButtonDown[1])? 1:3) < 1 && this.messageText.reveal < this.messageText.realLength) {
                 this.messageText.reveal++;
             }
             
@@ -81,15 +66,24 @@ Events.ShowText = class {
                 } else {
                     this.time = 10;
                     this.waning = true;
+                    this.textContainer.visible = false;
                 }
             }
 
-            this.time += delta;
+            if (!this.waning) {
+                this.time += delta;
+
+                if (this.time >= 10) {
+                    this.textContainer.visible = true;
+                }
+            }
         }
 
-        var ease = Math.pow(Math.clamp(this.time / 10, 0, 1) - 1, 3) + 1;
-        this.graphics.scale.y = ease;
-        this.mask.height = Math.floor(ease * (this.height - 4));
+        if (this.ns) {
+            var ease = Math.pow(Math.clamp(this.time / 10, 0, 1) - 1, 3) + 1;
+            this.ns.height = Math.floor(this.height * ease);
+            this.ns.y = Math.floor((this.height - this.ns.height) / 2);
+        }
         this.messageText.redraw();
     }
 }
@@ -107,19 +101,8 @@ Events.ShowChoices = class {
         this.container.x = Math.floor(width / 2);
         this.container.y = Math.floor(height * (this.args.hasOwnProperty('y')? this.args.y:0.775));
 
-        this.graphics = new PIXI.Graphics();
-        this.graphics.x = 0;
-        this.container.addChild(this.graphics);
-
         this.textContainer = new PIXI.Graphics();
         this.container.addChild(this.textContainer);
-
-        this.mask = new PIXI.Sprite(PIXI.Texture.WHITE);
-        this.mask.anchor.y = 0.5;
-        this.mask.x = -4;
-        this.mask.width = this.width + 8;
-        this.textContainer.addChild(this.mask);
-        this.textContainer.mask = this.mask;
 
         this.optionTexts = [];
         var y = 6;
@@ -136,34 +119,26 @@ Events.ShowChoices = class {
         this.halfHeight = Math.floor(this.height / 2);
         this.container.pivot.x = this.halfWidth;
         this.container.pivot.y = this.halfHeight;
-        this.mask.y = this.halfHeight;
 
-        this.selectionGraphics = new PIXI.Graphics();
-        this.textContainer.addChild(this.selectionGraphics);
+        if (this.args.hasOwnProperty('background')) {
+            this.bgNS = nineslice[this.args.background]();
+            this.container.addChildAt(this.bgNS, 0);
 
-        this.graphics.x = this.halfWidth;
-        this.graphics.y = this.halfHeight;
+            this.bgNS.x = -6;
+            this.bgNS.width = this.width + 12;
 
-        this.graphics.beginFill(0xffffc9);
-        this.graphics.drawRect(-this.halfWidth - 6, -this.halfHeight, this.width + 12, y + 4);
-        this.graphics.endFill();
-
-        this.graphics.beginFill(0x004d4d);
-        this.graphics.drawRect(-this.halfWidth - 4, -this.halfHeight + 2, this.width + 8, y);
-        this.graphics.endFill();
-
-        this.selectionGraphics.beginFill(0xffffc9);
-        this.selectionGraphics.drawRect(0, 0, this.width, 2);
-        this.selectionGraphics.drawRect(0, this.optionTexts[0].height + 6, this.width, 2);
-        this.selectionGraphics.drawRect(0, 0, 2, this.optionTexts[0].height + 6);
-        this.selectionGraphics.drawRect(this.width - 2, 0, 2, this.optionTexts[0].height + 6);
-        this.selectionGraphics.endFill();
+            this.selectionNS = nineslice[this.args.background]();
+            this.textContainer.addChildAt(this.selectionNS, 0);
+            
+            this.selectionNS.width = this.width;
+            this.selectionNS.height = this.optionTexts[0].height + 6;
+        }
     }
 
     play(eventPlayer) {
         this.eventPlayer = eventPlayer;
-        this.graphics.scale.y = 0;
-        this.mask.height = 0;
+        if (this.bgNS) this.bgNS.height = 0;
+        this.textContainer.visible = false;
         this.time = 0;
         this.waning = false;
         
@@ -171,8 +146,8 @@ Events.ShowChoices = class {
 
         this.optionTexts[this.selection].tint = 0xffffff;
         this.optionTexts[this.selection].redraw();
-        this.selectionGraphics.x = this.optionTexts[this.selection].x - 6;
-        this.selectionGraphics.y = this.optionTexts[this.selection].y - 4;
+        if (this.selectionNS) this.selectionNS.x = this.optionTexts[this.selection].x - 6;
+        if (this.selectionNS) this.selectionNS.y = this.optionTexts[this.selection].y - 4;
         
         gui.addChild(this.container);
         needsUpdate.push(this);
@@ -201,8 +176,9 @@ Events.ShowChoices = class {
             if (this.time > 0 && (keyPressed.KeyZ || gamepadButtonPressed[0])) {
                 this.time = 10;
                 this.waning = true;
+                this.textContainer.visible = false;
             }
-
+            
             var axisLengthPrev = Math.sqrt(Math.pow(gamepadAxesPrev[0], 2) + Math.pow(gamepadAxesPrev[1], 2));
             var axisLength = Math.sqrt(Math.pow(gamepadAxes[0], 2) + Math.pow(gamepadAxes[1], 2));
             var axisDir = Math.rad2deg(Math.atan2(gamepadAxes[1], gamepadAxes[0]));
@@ -218,8 +194,8 @@ Events.ShowChoices = class {
                     this.optionTexts[i].redraw();
                 }
     
-                this.selectionGraphics.x = this.optionTexts[this.selection].x - 6;
-                this.selectionGraphics.y = this.optionTexts[this.selection].y - 4;
+                if (this.selectionNS) this.selectionNS.x = this.optionTexts[this.selection].x - 6;
+                if (this.selectionNS) this.selectionNS.y = this.optionTexts[this.selection].y - 4;
             } else if (keyPressed.ArrowUp || gamepadButtonPressed[12] || (axisLengthPrev < 0.5 && axisLength >= 0.5 && axisDir >= 45 && axisDir <= 135)) {
                 this.selection = Math.modulo(this.selection - 1, this.args.options.length);
     
@@ -232,16 +208,24 @@ Events.ShowChoices = class {
                     this.optionTexts[i].redraw();
                 }
     
-                this.selectionGraphics.x = this.optionTexts[this.selection].x - 6;
-                this.selectionGraphics.y = this.optionTexts[this.selection].y - 4;
+                if (this.selectionNS) this.selectionNS.x = this.optionTexts[this.selection].x - 6;
+                if (this.selectionNS) this.selectionNS.y = this.optionTexts[this.selection].y - 4;
             }
 
-            this.time += delta;
+            if (!this.waning) {
+                this.time += delta;
+
+                if (this.time >= 10) {
+                    this.textContainer.visible = true;
+                }
+            }
         }
 
-        var ease = Math.pow(Math.clamp(this.time / 10, 0, 1) - 1, 3) + 1;
-        this.graphics.scale.y = ease;
-        this.mask.height = Math.floor(ease * (this.height - 4));
+        if (this.bgNS) {
+            var ease = Math.pow(Math.clamp(this.time / 10, 0, 1) - 1, 3) + 1;
+            this.bgNS.height = Math.floor(this.height * ease);
+            this.bgNS.y = Math.floor((this.height - this.bgNS.height) / 2);
+        }
         for (var optionText of this.optionTexts) {
             optionText.redraw();
         }
