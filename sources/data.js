@@ -32,7 +32,7 @@ var dataJSON = {
         "nineslice": {
             "default": {
                 "path":"assets/gui/ns_default.png",
-                "left":12, "right":12, "top":12, "bottom":12
+                "left":2, "right":2, "top":2, "bottom":2
             }
         }
     },
@@ -88,33 +88,35 @@ var dataJSON = {
         "newGame": [
             {"type":"FadeOutPicture", "arguments":{"frameDuration":30}},
             {"type":"Delay", "arguments":{"frameDuration":60}},
-            {"type":"ShowText", "arguments":{"message":"Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do:", "y":0.5}},
-            {"type":"ShowText", "arguments":{"message":"once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it,", "y":0.5}},
-            {"type":"ShowText", "arguments":{"message":"'and what is the use of a book,' thought Alice 'without pictures or conversations?'", "y":0.5}},
-            {"type":"ShowText", "arguments":{"message":"So she was considering in her own mind (as well as she could, for the hot day made her feel very sleepy and stupid),", "y":0.5}},
-            {"type":"ShowText", "arguments":{"message":"whether the pleasure of making a daisy-chain would be worth the trouble of getting up and picking the daisies,", "y":0.5}},
-            {"type":"ShowText", "arguments":{"message":"when suddenly a White Rabbit with pink eyes ran close by her.", "y":0.5}},
-            {"type":"Delay", "arguments":{"frameDuration":120}},
+            /**
+             * {"type":"ShowText", "arguments":{"message":"Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do:", "y":0.5}},
+             * {"type":"ShowText", "arguments":{"message":"once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it,", "y":0.5}},
+             * {"type":"ShowText", "arguments":{"message":"'and what is the use of a book,' thought Alice 'without pictures or conversations?'", "y":0.5}},
+             * {"type":"ShowText", "arguments":{"message":"So she was considering in her own mind (as well as she could, for the hot day made her feel very sleepy and stupid),", "y":0.5}},
+             * {"type":"ShowText", "arguments":{"message":"whether the pleasure of making a daisy-chain would be worth the trouble of getting up and picking the daisies,", "y":0.5}},
+             * {"type":"ShowText", "arguments":{"message":"when suddenly a White Rabbit with pink eyes ran close by her.", "y":0.5}},
+             * {"type":"Delay", "arguments":{"frameDuration":120}},
+             */
             {"type":"MapChange", "arguments":{"map":"kitchen", "x":224, "y":160}}
         ],
 
         "doorOut": [
-            {"type":"ShowText", "arguments":{"background":"default", "message":"The door leading outside."}},
-            {"type":"ShowChoices", "arguments":{"background":"default", "options":[{"text":"Go Out", "events":"goOut"}, {"text":"Stay"}]}}
+            {"type":"ShowText", "arguments":{"background":"default", "name":"Catbulb", "message":"The door leading outside."}},
+            {"type":"ShowTextChoices", "arguments":{"background":"default", "message":"Go out?", "options":[{"text":"Yes", "events":"goOut"}, {"text":"No"}]}}
         ],
         "goOut": [
             {"type":"MapChange", "arguments":{"map":"livingRoom", "x":367}},
             {"type":"AddFilter", "arguments":{"container":"viewport", "filter":"grayscale"}},
-            {"type":"MovePlayer", "arguments":{"frameDuration":10, "direction":180}},
+            {"type":"MovePlayer", "arguments":{"x":342}},
             {"type":"ShowText", "arguments":{"background":"default", "message":"...the lights turned off."}}
         ],
         "doorToKitchen": [
             {"type":"ShowText", "arguments":{"background":"default", "message":"The door leading to the kitchen."}},
-            {"type":"ShowChoices", "arguments":{"background":"default", "options":[{"text":"Enter", "events":"goToKitchen"}, {"text":"Stay"}]}}
+            {"type":"ShowTextChoices", "arguments":{"background":"default", "message":"Go into the kitchen?", "options":[{"text":"Yes", "events":"goToKitchen"}, {"text":"No"}]}}
         ],
         "goToKitchen": [
             {"type":"MapChange", "arguments":{"map":"kitchen", "x":113}},
-            {"type":"MovePlayer", "arguments":{"frameDuration":10, "direction":0}}
+            {"type":"MovePlayer", "arguments":{"x":138}}
         ],
         "sink": [
             {"type":"ShowText", "arguments":{"background":"default", "message":"A kitchen sink."}},

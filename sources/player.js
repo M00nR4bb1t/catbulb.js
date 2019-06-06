@@ -76,7 +76,7 @@ class Player extends Entity {
             if (this.sprite.textures != this.walkAnim) {
                 this.sprite.textures = this.walkAnim;
                 this.sprite.animationSpeed = 0.15;
-                this.sprite.gotoAndPlay(0);
+                this.sprite.gotoAndPlay(1);
             }
             if (this.vel.x != 0) {
                 this.sprite.scale.x = Math.sign(this.vel.x);
