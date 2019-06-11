@@ -31,6 +31,18 @@ Math.rad2deg = function(radians) {
     return (radians / Math.PI * 180) + 180;
 }
 
+Waves = {
+    'sine': function (t) {
+        return Math.sin(t * 2 * Math.PI);
+    },
+    'saw': function (t) {
+        return t * 2 - 1;
+    },
+    'triangle': function (t) {
+        return 1 - Math.abs(t - 0.5) * 4;
+    }
+};
+
 class BitmapText extends PIXI.Graphics {
     constructor(text, wrapWidth, tint=0xffffff, reveal=-1) {
         super();
@@ -43,16 +55,34 @@ class BitmapText extends PIXI.Graphics {
 
     set text(text) {
         this._text = text;
+        var x = 0, y = 0;
         var ind = 0;
         for (var i=0; i<text.length; i++) {
             var charCode = text.charCodeAt(i);
             if (charCode == 10) {
+                y += charHeight;
+                x = 0;
                 ind++;
-            } else if (charCode == 167 && text.length > i + 1 && text.charCodeAt(i + 1) == 123) {
+            } else if (charCode == 167 && this.text.length > i + 1 && this.text.charCodeAt(i + 1) == 123) {
+                var JSONString = this.text.substr(i + 1).match(/{.*?}/g)[0];
+                i += JSONString.length;
                 continue;
             } else if (charCode < 128) {
+                var charWidth = fonts.ascii[0].width, charHeight = fonts.ascii[0].height;
+                var nextWord = this.text.substr(i).match(/ .*?(?=(?: |\n|§|$))/g);
+                if (charCode == 32 && nextWord != null && charWidth * nextWord.length <= this.wrapWidth && x + charWidth * nextWord[0].length > this.wrapWidth) {
+                    y += charHeight;
+                    x = 0;
+                    continue;
+                } else if (charCode != 32 && x + charWidth * 2 > this.wrapWidth) {
+                    x += charWidth;
+                    y += charHeight;
+                    x = 0;
+                }
+                x += charWidth;
                 ind++;
             } else if (charCode >= 0xac00 && charCode <= 0xd7a3) {
+                x += fonts.kr[0].width;
                 ind++;
             }
         }
@@ -66,7 +96,7 @@ class BitmapText extends PIXI.Graphics {
     redraw() {
         this.clear();
         var x = 0, y = 0;
-        var shake = 0, tint = this.tint;
+        var shakeAmount = 0, shakeType = 'sine', shakeSpeed = 0.01, shakeIncrement = 0.2, tint = this.tint;
         var ind = 0;
         for (var i=0; i<this.text.length; i++) {
             if (ind == this.reveal) {
@@ -74,6 +104,8 @@ class BitmapText extends PIXI.Graphics {
             }
 
             var charCode = this.text.charCodeAt(i);
+            var t = ((Date.now() * shakeSpeed + i) * shakeIncrement) % 1;
+            var shakeOffset = Math.round(Waves[shakeType](t) * shakeAmount);
             if (charCode == 10) {
                 y += charHeight;
                 x = 0;
@@ -82,8 +114,17 @@ class BitmapText extends PIXI.Graphics {
                 var JSONString = this.text.substr(i + 1).match(/{.*?}/g)[0];
                 var JSONData = JSON.parse(JSONString);
                 
-                if (JSONData.shake != undefined) {
-                    shake = JSONData.shake;
+                if (JSONData.shakeAmount != undefined) {
+                    shakeAmount = JSONData.shakeAmount;
+                }
+                if (JSONData.shakeType != undefined) {
+                    shakeType = JSONData.shakeType;
+                }
+                if (JSONData.shakeSpeed != undefined) {
+                    shakeSpeed = JSONData.shakeSpeed;
+                }
+                if (JSONData.shakeIncrement != undefined) {
+                    shakeIncrement = JSONData.shakeIncrement;
                 }
                 if (JSONData.tint != undefined) {
                     if ((typeof JSONData.tint) == 'string' && JSONData.tint.charAt(0) == '#') {
@@ -98,12 +139,19 @@ class BitmapText extends PIXI.Graphics {
             } else if (charCode < 128) {
                 var charWidth = fonts.ascii[0].width, charHeight = fonts.ascii[0].height;
                 var nextWord = this.text.substr(i).match(/ .*?(?=(?: |\n|§|$))/g);
-                if (charCode == 32 && nextWord != null && x + charWidth * nextWord[0].length > this.wrapWidth) {
+                if (charCode == 32 && nextWord != null && charWidth * nextWord.length <= this.wrapWidth && x + charWidth * nextWord[0].length > this.wrapWidth) {
                     y += charHeight;
                     x = 0;
                     continue;
+                } else if (charCode != 32 && x + charWidth * 2 > this.wrapWidth) {
+                    var texture = fonts.ascii[45];
+                    this.beginTextureFill(texture, tint, 1, new PIXI.Matrix(1, 0, 0, 1, Math.floor(x % texture.width), Math.floor((y + shakeOffset) % texture.height)));
+                    this.drawRect(x, y + shakeOffset, charWidth, charHeight);
+                    this.endFill();
+                    x += charWidth;
+                    y += charHeight;
+                    x = 0;
                 }
-                var shakeOffset = Math.round((Math.sin(Date.now() / 100 + i) - 0.5) * shake);
                 var texture = fonts.ascii[charCode];
                 this.beginTextureFill(texture, tint, 1, new PIXI.Matrix(1, 0, 0, 1, Math.floor(x % texture.width), Math.floor((y + shakeOffset) % texture.height)));
                 this.drawRect(x, y + shakeOffset, charWidth, charHeight);
@@ -112,7 +160,6 @@ class BitmapText extends PIXI.Graphics {
                 ind++;
             } else if (charCode >= 0xac00 && charCode <= 0xd7a3) {
                 var charWidth = fonts.kr[0].width, charHeight = fonts.kr[0].height;
-                var nextWord = this.text.substr(i).match(/ .*?(?=(?: |$))/g);
                 
                 var _charCode = charCode - 0xac00;
                 var jong = _charCode % 28;
@@ -161,7 +208,6 @@ class BitmapText extends PIXI.Graphics {
                     jongBul = 3;
                 }
 
-                var shakeOffset = Math.round((Math.sin(Date.now() / 100 + i) - 0.5) * shake);
                 var texture = fonts.kr[choBul * 32 + cho];
                 this.beginTextureFill(texture, tint, 1, new PIXI.Matrix(1, 0, 0, 1, Math.floor(x % texture.width), Math.floor((y + shakeOffset) % texture.height)));
                 this.drawRect(x, y + shakeOffset, charWidth, charHeight);

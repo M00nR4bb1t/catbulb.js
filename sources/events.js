@@ -32,13 +32,14 @@ Events.ShowText = class {
         this.textContainer.addChild(this.messageText);
 
         if (this.args.hasOwnProperty('name')) {
+            var nameBGWidth = Math.floor(this.width / 5 * 2);
             if (this.args.hasOwnProperty('background')) {
                 this.nameNS = nineslice[this.args.background]();
-                this.nameNS.width = Math.floor(this.width / 5 * 2);
+                this.nameNS.width = nameBGWidth;
                 this.container.addChildAt(this.nameNS, 0);
             }
 
-            this.nameText = new BitmapText(this.args.name, this.width - 12);
+            this.nameText = new BitmapText(this.args.name, nameBGWidth - 12);
             this.nameText.x = 6;
             this.nameText.y = -this.nameText.height - 10;
             this.nameNSHeight = this.nameText.height + 16;
@@ -320,6 +321,21 @@ Events.ShowTextChoices = class {
             this.selectionNS.height = this.optionTexts[0].height + 6;
         }
 
+        if (this.args.hasOwnProperty('name')) {
+            var nameBGWidth = Math.floor(this.width / 5 * 2);
+            if (this.args.hasOwnProperty('background')) {
+                this.nameNS = nineslice[this.args.background]();
+                this.nameNS.width = nameBGWidth;
+                this.container.addChildAt(this.nameNS, 0);
+            }
+
+            this.nameText = new BitmapText(this.args.name, nameBGWidth - 12);
+            this.nameText.x = 6;
+            this.nameText.y = -this.nameText.height - 10;
+            this.nameNSHeight = this.nameText.height + 16;
+            this.textContainer.addChild(this.nameText);
+        }
+
         this.masterContainer = new PIXI.Container();
         this.masterContainer.addChild(this.container);
         this.masterContainer.addChild(this.optionsContainer);
@@ -330,6 +346,7 @@ Events.ShowTextChoices = class {
         if (this.ns) this.ns.height = 0;
         this.textContainer.visible = false;
         if (this.bgNS) this.bgNS.height = 0;
+        if (this.nameNS) this.nameNS.height = 0;
         this.optionTextsContainer.visible = false;
         this.time = 0;
         this.waning = false;
@@ -434,10 +451,15 @@ Events.ShowTextChoices = class {
             this.bgNS.height = Math.floor(this.optionsHeight * ease);
             this.bgNS.y = Math.floor((this.optionsHeight - this.bgNS.height) / 2);
         }
+        if (this.nameNS) {
+            this.nameNS.height = Math.floor(this.nameNSHeight * ease);
+            this.nameNS.y = Math.floor((-this.nameNSHeight - this.nameNS.height) / 2) - 2;
+        }
         this.messageText.redraw();
         for (var optionText of this.optionTexts) {
             optionText.redraw();
         }
+        if (this.nameText) {this.nameText.redraw();}
     }
 }
 
@@ -492,7 +514,7 @@ Events.MapChange = class {
         this.eventPlayer.next();
 
         if (!this.bitmapText.text) {
-            this.bitmapText.text = '§{"shake":3}' + maps[this.args.map].displayName;
+            this.bitmapText.text = '§{"shakeAmount":3}' + maps[this.args.map].displayName;
             this.bitmapText.redraw();
 
             this.width = this.bitmapText.width + 12;
@@ -612,14 +634,32 @@ Events.Picture = class {
     }
 }
 
-Events.RemovePicture = class {
+Events.FadeInPicture = class {
     constructor(args) {
         this.args = args;
+        this.sprite = new PIXI.Sprite(resources[this.args.path].texture);
+        this.sprite.anchor.set(0.5, 0.5);
+        this.sprite.x = width * (this.args.hasOwnProperty('x')? this.args.x:0.5);
+        this.sprite.y = height * (this.args.hasOwnProperty('y')? this.args.y:0.5);
     }
 
-    play(trigger) {
-        gui.removeChild(variables[this.args.hasOwnProperty('variable')? this.args.variable:'_picture']);
-        trigger.next();
+    play(eventPlayer) {
+        gui.addChild(this.sprite);
+        variables[this.args.hasOwnProperty('variable')? args.variable:'_picture'] = this.sprite;
+        this.eventPlayer = eventPlayer;
+        this.time = 0;
+        needsUpdate.push(this);
+    }
+
+    update(delta) {
+        this.time += delta;
+        this.sprite.alpha = this.time / this.args.frameDuration;
+
+        if (this.sprite.alpha > 1) {
+            this.sprite.alpha = 1;
+            needsUpdate.remove(this);
+            this.eventPlayer.next();
+        }
     }
 }
 
@@ -642,6 +682,17 @@ Events.FadeOutPicture = class {
             needsUpdate.remove(this);
             this.eventPlayer.next();
         }
+    }
+}
+
+Events.RemovePicture = class {
+    constructor(args) {
+        this.args = args;
+    }
+
+    play(trigger) {
+        gui.removeChild(variables[this.args.hasOwnProperty('variable')? this.args.variable:'_picture']);
+        trigger.next();
     }
 }
 

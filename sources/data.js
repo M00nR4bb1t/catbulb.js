@@ -82,33 +82,28 @@ var dataJSON = {
     // Events
     "events": {
         "_gameStart": [
-            {"type":"Picture", "arguments":{"path":"assets/pictures/spaghetti.jpg"}},
+            {"type":"FadeInPicture", "arguments":{"path":"assets/pictures/spaghetti.jpg", "frameDuration":30}},
             {"type":"ShowChoices", "arguments":{"background":"default", "options":[{"text":"New Game", "events":"newGame"}, {"text":"Continue"}, {"text":"Shutdown"}]}}
         ],
         "newGame": [
             {"type":"FadeOutPicture", "arguments":{"frameDuration":30}},
             {"type":"Delay", "arguments":{"frameDuration":60}},
-            /**
-             * {"type":"ShowText", "arguments":{"message":"Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do:", "y":0.5}},
-             * {"type":"ShowText", "arguments":{"message":"once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it,", "y":0.5}},
-             * {"type":"ShowText", "arguments":{"message":"'and what is the use of a book,' thought Alice 'without pictures or conversations?'", "y":0.5}},
-             * {"type":"ShowText", "arguments":{"message":"So she was considering in her own mind (as well as she could, for the hot day made her feel very sleepy and stupid),", "y":0.5}},
-             * {"type":"ShowText", "arguments":{"message":"whether the pleasure of making a daisy-chain would be worth the trouble of getting up and picking the daisies,", "y":0.5}},
-             * {"type":"ShowText", "arguments":{"message":"when suddenly a White Rabbit with pink eyes ran close by her.", "y":0.5}},
-             * {"type":"Delay", "arguments":{"frameDuration":120}},
-             */
+            {"type":"ShowText", "arguments":{"message":"§{\"shakeAmount\":2}Sine shake§{\"shakeAmount\":0} test\nAmount: §{\"shakeAmount\":1}1 §{\"shakeAmount\":2}2 §{\"shakeAmount\":3}3 §{\"shakeAmount\":4}4\n§{\"shakeAmount\":0}Speed: §{\"shakeAmount\":2, \"shakeSpeed\":0.005}0.005 §{\"shakeSpeed\":0.01}0.01 §{\"shakeSpeed\":0.02}0.02\n§{\"shakeSpeed\":0.01, \"shakeAmount\":0}Increment: §{\"shakeAmount\":2, \"shakeIncrement\":0.1}0.1 §{\"shakeIncrement\":0.2}0.2 §{\"shakeIncrement\":0.3}0.3 §{\"shakeIncrement\":0.4}0.4", "y":0.5}},
+            {"type":"ShowText", "arguments":{"message":"§{\"shakeAmount\":2, \"shakeType\":\"saw\"}Saw shake§{\"shakeAmount\":0} test\nAmount: §{\"shakeAmount\":1}1 §{\"shakeAmount\":2}2 §{\"shakeAmount\":3}3 §{\"shakeAmount\":4}4\n§{\"shakeAmount\":0}Speed: §{\"shakeAmount\":2, \"shakeSpeed\":0.005}0.005 §{\"shakeSpeed\":0.01}0.01 §{\"shakeSpeed\":0.02}0.02\n§{\"shakeSpeed\":0.01, \"shakeAmount\":0}Increment: §{\"shakeAmount\":2, \"shakeIncrement\":0.1}0.1 §{\"shakeIncrement\":0.2}0.2 §{\"shakeIncrement\":0.3}0.3 §{\"shakeIncrement\":0.4}0.4", "y":0.5}},
+            {"type":"ShowText", "arguments":{"message":"§{\"shakeAmount\":2, \"shakeType\":\"triangle\"}Triangle shake§{\"shakeAmount\":0} test\nAmount: §{\"shakeAmount\":1}1 §{\"shakeAmount\":2}2 §{\"shakeAmount\":3}3 §{\"shakeAmount\":4}4\n§{\"shakeAmount\":0}Speed: §{\"shakeAmount\":2, \"shakeSpeed\":0.005}0.005 §{\"shakeSpeed\":0.01}0.01 §{\"shakeSpeed\":0.02}0.02\n§{\"shakeSpeed\":0.01, \"shakeAmount\":0}Increment: §{\"shakeAmount\":2, \"shakeIncrement\":0.1}0.1 §{\"shakeIncrement\":0.2}0.2 §{\"shakeIncrement\":0.3}0.3 §{\"shakeIncrement\":0.4}0.4", "y":0.5}},
+            {"type":"Delay", "arguments":{"frameDuration":120}},
             {"type":"MapChange", "arguments":{"map":"kitchen", "x":224, "y":160}}
         ],
 
         "doorOut": [
-            {"type":"ShowText", "arguments":{"background":"default", "name":"Catbulb", "message":"The door leading outside."}},
+            {"type":"ShowText", "arguments":{"background":"default", "message":"The door leading outside."}},
             {"type":"ShowTextChoices", "arguments":{"background":"default", "message":"Go out?", "options":[{"text":"Yes", "events":"goOut"}, {"text":"No"}]}}
         ],
         "goOut": [
             {"type":"MapChange", "arguments":{"map":"livingRoom", "x":367}},
             {"type":"AddFilter", "arguments":{"container":"viewport", "filter":"grayscale"}},
             {"type":"MovePlayer", "arguments":{"x":342}},
-            {"type":"ShowText", "arguments":{"background":"default", "message":"...the lights turned off."}}
+            {"type":"ShowText", "arguments":{"background":"default", "name":"Luke", "message":"...the lights turned off."}}
         ],
         "doorToKitchen": [
             {"type":"ShowText", "arguments":{"background":"default", "message":"The door leading to the kitchen."}},
@@ -125,7 +120,7 @@ var dataJSON = {
         ],
         "stove": [
             {"type":"ShowText", "arguments":{"background":"default", "message":"A gas stove."}},
-            {"type":"ShowText", "arguments":{"background":"default", "message":"§{\"shake\":1, \"tint\":16711680}Ow!§{\"shake\":0, \"tint\":16777215} It's still hot."}}
+            {"type":"ShowText", "arguments":{"background":"default", "name":"Luke", "message":"§{\"shakeAmount\":1, \"tint\":16711680}Ow!§{\"shakeAmount\":0, \"tint\":16777215} It's still hot."}}
         ],
         "refrigerator": [
             {"type":"Picture", "arguments":{"path":"assets/pictures/spaghetti.jpg", "y":0.4}},
@@ -134,21 +129,21 @@ var dataJSON = {
         ],
         "kitchenHole": [
             {"type":"ShowText", "arguments":{"background":"default", "message":"A big hole, around 2 meters in diameter."}},
-            {"type":"ShowText", "arguments":{"background":"default", "message":"§{\"shake\":3}...Woah!§{\"shake\":0} I almost fell down through the hole!"}}
+            {"type":"ShowText", "arguments":{"background":"default", "name":"Luke", "message":"§{\"shakeAmount\":3}...Woah!§{\"shakeAmount\":0} I almost fell down through the hole!"}}
         ],
         "fireplace": [
-            {"type":"ShowText", "arguments":{"background":"default", "message":"§{\"shake\":2}Hi! I'm your friendly neighbourhood talking fireplace!"}},
-            {"type":"ShowText", "arguments":{"background":"default", "message":"§{\"shake\":2}I'm here to demonstrate Event.Code to you."}},
+            {"type":"ShowText", "arguments":{"background":"default", "name":"Friendly Neighbourhood Fireplace", "message":"§{\"shakeAmount\":2}Hi! I'm your friendly neighbourhood talking fireplace!"}},
+            {"type":"ShowText", "arguments":{"background":"default", "name":"Friendly Neighbourhood Fireplace", "message":"§{\"shakeAmount\":2}I'm here to demonstrate Event.Code to you."}},
             {"type":"Code", "arguments":{"code":"console.log('A warm hello from your friendly neighbourhood talking fireplace!');"}},
             {"type":"Delay", "arguments":{"frameDuration":90}},
-            {"type":"ShowText", "arguments":{"background":"default", "message":"§{\"shake\":2}Check the console!"}},
+            {"type":"ShowText", "arguments":{"background":"default", "name":"Friendly Neighbourhood Fireplace", "message":"§{\"shakeAmount\":2}Check the console!"}},
             {"type":"Delay", "arguments":{"frameDuration":90}},
-            {"type":"ShowText", "arguments":{"background":"default", "message":"§{\"shake\":2}Oh, I can also play songs for you!"}},
+            {"type":"ShowText", "arguments":{"background":"default", "name":"Friendly Neighbourhood Fireplace", "message":"§{\"shakeAmount\":2}Oh, I can also play songs for you!"}},
             {"type":"Delay", "arguments":{"frameDuration":90}},
             {"type":"SoundEffect", "arguments":{"path":"assets/se/twinkle.wav", "async":true}},
             {"type":"Delay", "arguments":{"frameDuration":153}},
             {"type":"StopSound"},
-            {"type":"ShowText", "arguments":{"background":"default", "message":"§{\"shake\":2}Actually, you know what, I don't really like that song. Forget it."}}
+            {"type":"ShowText", "arguments":{"background":"default", "name":"Friendly Neighbourhood Fireplace", "message":"§{\"shakeAmount\":2}Actually, you know what, I don't really like that song. Forget it."}}
         ],
         "sofa": [
             {"type":"ShowText", "arguments":{"background":"default", "message":"A couch."}},
