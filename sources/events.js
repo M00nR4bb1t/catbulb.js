@@ -26,7 +26,7 @@ Events.ShowText = class {
         this.textContainer = new PIXI.Graphics();
         this.container.addChild(this.textContainer);
 
-        this.messageText = new BitmapText(this.args.message, this.width - 12);
+        this.messageText = new BitmapText('', this.width - 12);
         this.messageText.x = 6;
         this.messageText.y = 8;
         this.textContainer.addChild(this.messageText);
@@ -39,10 +39,8 @@ Events.ShowText = class {
                 this.container.addChildAt(this.nameNS, 0);
             }
 
-            this.nameText = new BitmapText(this.args.name, nameBGWidth - 12);
+            this.nameText = new BitmapText('', nameBGWidth - 12);
             this.nameText.x = 6;
-            this.nameText.y = -this.nameText.height - 10;
-            this.nameNSHeight = this.nameText.height + 16;
             this.textContainer.addChild(this.nameText);
         }
     }
@@ -54,6 +52,12 @@ Events.ShowText = class {
         this.textContainer.visible = false;
         this.time = 0;
         this.waning = false;
+        this.messageText.text = this.args.message.interpolate();
+        if (this.nameText) {
+            this.nameText.text = this.args.name.interpolate();
+            this.nameText.y = -this.nameText.pixelHeight - 10;
+            this.nameNSHeight = this.nameText.pixelHeight + 16;
+        }
         this.messageText.reveal = 0;
         this.messageText.redraw();
         gui.addChild(this.container);
@@ -124,20 +128,13 @@ Events.ShowChoices = class {
         this.container.addChild(this.textContainer);
 
         this.optionTexts = [];
-        var y = 6;
         for (var i=0; i<this.args.options.length; i++) {
-            this.optionTexts[i] = new BitmapText(this.args.options[i].text, this.width - 12, 0xcccccc);
+            this.optionTexts[i] = new BitmapText('', this.width - 12, 0xcccccc);
             this.optionTexts[i].x = 6;
-            y += 4;
-            this.optionTexts[i].y = y;
-            y += this.optionTexts[i].height + 6;
             this.textContainer.addChild(this.optionTexts[i]);
         }
 
-        this.height = y + 4;
-        this.halfHeight = Math.floor(this.height / 2);
         this.container.pivot.x = this.halfWidth;
-        this.container.pivot.y = this.halfHeight;
 
         if (this.args.hasOwnProperty('background')) {
             this.bgNS = nineslice[this.args.background]();
@@ -150,7 +147,7 @@ Events.ShowChoices = class {
             this.textContainer.addChildAt(this.selectionNS, 0);
             
             this.selectionNS.width = this.width;
-            this.selectionNS.height = this.optionTexts[0].height + 6;
+            this.selectionNS.height = fonts.ascii[0].height + 6;
         }
     }
 
@@ -162,6 +159,16 @@ Events.ShowChoices = class {
         this.waning = false;
         
         this.selection = 0;
+
+        var y = 6;
+        for (var i=0; i<this.args.options.length; i++) {
+            this.optionTexts[i].text = this.args.options[i].text.interpolate();
+            this.optionTexts[i].y = y + 4;
+            y += this.optionTexts[i].pixelHeight + 10;
+        }
+        this.height = y + 4;
+        this.halfHeight = Math.floor(this.height / 2);
+        this.container.pivot.y = this.halfHeight;
 
         this.optionTexts[this.selection].tint = 0xffffff;
         this.optionTexts[this.selection].redraw();
@@ -187,6 +194,8 @@ Events.ShowChoices = class {
                     }
                 } else {
                     this.eventPlayer.next();
+                    this.optionTexts[this.selection].tint = 0xcccccc;
+                    this.optionTexts[this.selection].redraw();
                 }
             }
 
@@ -279,7 +288,7 @@ Events.ShowTextChoices = class {
         this.textContainer = new PIXI.Graphics();
         this.container.addChild(this.textContainer);
 
-        this.messageText = new BitmapText(this.args.message, this.width - 12);
+        this.messageText = new BitmapText('', this.width - 12);
         this.messageText.x = 6;
         this.messageText.y = 8;
         this.textContainer.addChild(this.messageText);
@@ -292,20 +301,13 @@ Events.ShowTextChoices = class {
         this.optionsContainer.addChild(this.optionTextsContainer);
 
         this.optionTexts = [];
-        var y = 6;
         for (var i=0; i<this.args.options.length; i++) {
-            this.optionTexts[i] = new BitmapText(this.args.options[i].text, (this.optionsWidth) - 12, 0xcccccc);
+            this.optionTexts[i] = new BitmapText('', (this.optionsWidth) - 12, 0xcccccc);
             this.optionTexts[i].x = 6;
-            y += 4;
-            this.optionTexts[i].y = y;
-            y += this.optionTexts[i].height + 6;
             this.optionTextsContainer.addChild(this.optionTexts[i]);
         }
 
-        this.optionsHeight = y + 4;
-        this.halfOptionsHeight = Math.floor(this.optionsHeight / 2);
         this.optionsContainer.pivot.x = this.halfOptionsWidth;
-        this.optionsContainer.pivot.y = this.optionsHeight;
 
         if (this.args.hasOwnProperty('background')) {
             this.bgNS = nineslice[this.args.background]();
@@ -318,7 +320,7 @@ Events.ShowTextChoices = class {
             this.optionTextsContainer.addChildAt(this.selectionNS, 0);
             
             this.selectionNS.width = this.optionsWidth;
-            this.selectionNS.height = this.optionTexts[0].height + 6;
+            this.selectionNS.height = fonts.ascii[0].height + 6;
         }
 
         if (this.args.hasOwnProperty('name')) {
@@ -329,10 +331,8 @@ Events.ShowTextChoices = class {
                 this.container.addChildAt(this.nameNS, 0);
             }
 
-            this.nameText = new BitmapText(this.args.name, nameBGWidth - 12);
+            this.nameText = new BitmapText('', nameBGWidth - 12);
             this.nameText.x = 6;
-            this.nameText.y = -this.nameText.height - 10;
-            this.nameNSHeight = this.nameText.height + 16;
             this.textContainer.addChild(this.nameText);
         }
 
@@ -351,6 +351,23 @@ Events.ShowTextChoices = class {
         this.time = 0;
         this.waning = false;
         
+        this.messageText.text = this.args.message.interpolate();
+        if (this.nameText) {
+            this.nameText.text = this.args.name.interpolate();
+            this.nameText.y = -this.nameText.pixelHeight - 10;
+            this.nameNSHeight = this.nameText.pixelHeight + 16;
+        }
+
+        var y = 6;
+        for (var i=0; i<this.args.options.length; i++) {
+            this.optionTexts[i].text = this.args.options[i].text.interpolate();
+            this.optionTexts[i].y = y + 4;
+            y += this.optionTexts[i].pixelHeight + 10;
+        }
+        this.optionsHeight = y + 4;
+        this.halfOptionsHeight = Math.floor(this.optionsHeight / 2);
+        this.optionsContainer.pivot.y = this.optionsHeight;
+
         this.selection = 0;
 
         this.messageText.reveal = 0;
@@ -379,6 +396,8 @@ Events.ShowTextChoices = class {
                     }
                 } else {
                     this.eventPlayer.next();
+                    this.optionTexts[this.selection].tint = 0xcccccc;
+                    this.optionTexts[this.selection].redraw();
                 }
             }
 
@@ -463,6 +482,262 @@ Events.ShowTextChoices = class {
     }
 }
 
+Events.ShowInventory = class {
+    constructor(args) {
+        this.args = args;
+        
+        this.width = Math.ceil(width / 5 * 3);
+        this.halfWidth = Math.floor(this.width / 2);
+        this.time = 0;
+        this.waning = false;
+        this.scroll = 0;
+
+        this.container = new PIXI.Container();
+        this.container.x = Math.floor(width / 2);
+        this.container.y = Math.floor(height * (this.args.hasOwnProperty('y')? this.args.y:0.5));
+
+        this.textContainer = new PIXI.Graphics();
+        this.container.addChild(this.textContainer);
+
+        this.rows = Math.floor(Math.ceil(height / 5 * 3) / (fonts.ascii[0].height + 10));
+        this.height = this.rows * (fonts.ascii[0].height + 10) + 16;
+        this.halfHeight = Math.floor(this.height / 2);
+        this.container.pivot.x = this.halfWidth;
+        this.container.pivot.y = this.halfHeight;
+
+        this.optionsMask = new PIXI.Sprite(PIXI.Texture.WHITE);
+        this.optionsMask.width = this.width;
+        this.optionsMask.height = this.height - 20;
+        this.optionsMask.y = 10;
+        this.container.addChild(this.optionsMask);
+        this.textContainer.mask = this.optionsMask;
+
+        if (this.args.hasOwnProperty('background')) {
+            this.bgNS = nineslice[this.args.background]();
+            this.container.addChildAt(this.bgNS, 0);
+
+            this.bgNS.x = -10;
+            this.bgNS.width = this.width + 20;
+
+            this.selectionNS = nineslice[this.args.background]();
+            this.textContainer.addChildAt(this.selectionNS, 0);
+                
+            this.selectionNS.width = this.width;
+        }
+    }
+
+    play(eventPlayer) {
+        this.eventPlayer = eventPlayer;
+        if (this.bgNS) this.bgNS.height = 0;
+        this.textContainer.visible = false;
+        this.time = 0;
+        this.waning = false;
+        this.scroll = 0;
+        this.textContainer.y = 0;
+        
+        this.selection = 0;
+
+        this.optionTexts = [], this.items = [];
+        if (this.textContainer.children.length > 1) this.textContainer.removeChildren(1);
+        var y = 10, i = 0;
+        for (var k in inventory) {
+            if (inventory[k] == 0) continue;
+            this.items[i] = k;
+            this.optionTexts[i] = new BitmapText(dataJSON.items[k].displayName + ' x ' + inventory[k], this.width - 20, 0xcccccc);
+            this.optionTexts[i].x = 6;
+            y += 4;
+            this.optionTexts[i].y = y;
+            y += this.optionTexts[i].pixelHeight + 6;
+            this.textContainer.addChild(this.optionTexts[i]);
+            i++;
+        }
+
+        if (this.optionTexts.length) {
+            this.optionTexts[this.selection].tint = 0xffffff;
+            this.optionTexts[this.selection].redraw();
+            if (this.selectionNS) {
+                this.selectionNS.x = this.optionTexts[this.selection].x - 6;
+                this.selectionNS.y = this.optionTexts[this.selection].y - 4;
+                this.selectionNS.height = fonts.ascii[0].height + 6;
+                this.selectionNS.visible = true;
+            }
+        } else if (this.selectionNS) {
+            this.selectionNS.visible = false;
+        }
+        
+        gui.addChild(this.container);
+        needsUpdate.push(this);
+    }
+
+    update(delta) {
+        if (this.waning) {
+            if (this.time <= 0) {
+                gui.removeChild(this.container);
+                needsUpdate.remove(this);
+                if (this.args.hasOwnProperty('events')) {
+                    if (this.items.length && this.args.events.hasOwnProperty(this.items[this.selection])) {
+                        this.eventPlayer.callback = null;
+                        this.eventPlayer.forceFinish();
+                        if (this.eventPlayer.trigger) {
+                            this.eventPlayer.trigger.play(0, eventPlayers[this.args.events[this.items[this.selection]]]);
+                        } else {
+                            eventPlayers[this.args.events[this.items[this.selection]]].play();
+                        }
+                    } else if (this.args.events.hasOwnProperty('_default')) {
+                        this.eventPlayer.callback = null;
+                        this.eventPlayer.forceFinish();
+                        if (this.eventPlayer.trigger) {
+                            this.eventPlayer.trigger.play(0, eventPlayers[this.args.events['_default']]);
+                        } else {
+                            eventPlayers[this.args.events['_default']].play();
+                        }
+                    }
+                } else {
+                    this.eventPlayer.next();
+                    if (this.optionTexts.length) {
+                        this.optionTexts[this.selection].tint = 0xcccccc;
+                        this.optionTexts[this.selection].redraw();
+                    }
+                }
+            }
+
+            this.time -= delta;
+        } else {
+            if (this.time > 0 && (keyPressed.KeyZ || gamepadButtonPressed[0])) {
+                this.time = 10;
+                this.waning = true;
+                this.textContainer.visible = false;
+            }
+            
+            var axisLengthPrev = Math.sqrt(Math.pow(gamepadAxesPrev[0], 2) + Math.pow(gamepadAxesPrev[1], 2));
+            var axisLength = Math.sqrt(Math.pow(gamepadAxes[0], 2) + Math.pow(gamepadAxes[1], 2));
+            var axisDir = Math.rad2deg(Math.atan2(gamepadAxes[1], gamepadAxes[0]));
+            if (this.optionTexts.length && (keyPressed.ArrowDown || gamepadButtonPressed[13] || (axisLengthPrev < 0.5 && axisLength >= 0.5 && axisDir >= 225 && axisDir <= 315))) {
+                this.selection = Math.modulo(this.selection + 1, this.optionTexts.length);
+                if (this.selection == 0) {
+                    this.scroll = 0;
+                } else if (this.selection - this.scroll >= this.rows) {
+                    this.scroll++;
+                }
+                this.textContainer.y = -this.scroll * (fonts.ascii[0].height + 10);
+    
+                for (var i=0; i<this.optionTexts.length; i++) {
+                    if (i == this.selection) {
+                        this.optionTexts[i].tint = 0xffffff;
+                    } else {
+                        this.optionTexts[i].tint = 0xcccccc;
+                    }
+                    this.optionTexts[i].redraw();
+                }
+    
+                if (this.selectionNS) this.selectionNS.x = this.optionTexts[this.selection].x - 6;
+                if (this.selectionNS) this.selectionNS.y = this.optionTexts[this.selection].y - 4;
+            } else if (this.optionTexts.length && (keyPressed.ArrowUp || gamepadButtonPressed[12] || (axisLengthPrev < 0.5 && axisLength >= 0.5 && axisDir >= 45 && axisDir <= 135))) {
+                this.selection = Math.modulo(this.selection - 1, this.optionTexts.length);
+                if (this.selection == this.optionTexts.length - 1 && this.optionTexts.length > this.rows) {
+                    this.scroll = this.optionTexts.length - this.rows;
+                } else if (this.selection - this.scroll < 0) {
+                    this.scroll--;
+                }
+                this.textContainer.y = -this.scroll * (fonts.ascii[0].height + 10);
+
+                for (var i=0; i<this.optionTexts.length; i++) {
+                    if (i == this.selection) {
+                        this.optionTexts[i].tint = 0xffffff;
+                    } else {
+                        this.optionTexts[i].tint = 0xcccccc;
+                    }
+                    this.optionTexts[i].redraw();
+                }
+    
+                if (this.selectionNS) this.selectionNS.x = this.optionTexts[this.selection].x - 6;
+                if (this.selectionNS) this.selectionNS.y = this.optionTexts[this.selection].y - 4;
+            }
+
+            if (!this.waning) {
+                this.time += delta;
+
+                if (this.time >= 10) {
+                    this.textContainer.visible = true;
+                }
+            }
+        }
+
+        if (this.bgNS) {
+            var ease = Math.pow(Math.clamp(this.time / 10, 0, 1) - 1, 3) + 1;
+            this.bgNS.height = Math.floor(this.height * ease);
+            this.bgNS.y = Math.floor((this.height - this.bgNS.height) / 2);
+        }
+        for (var optionText of this.optionTexts) {
+            optionText.redraw();
+        }
+    }
+}
+
+Events.GiveItem = class {
+    constructor(args) {
+        this.item = args.item;
+        this.count = args.hasOwnProperty('count')? args.count:1;
+    }
+
+    play(trigger) {
+        inventory[this.item] += this.count;
+        trigger.next();
+    }
+}
+
+Events.SetItem = class {
+    constructor(args) {
+        this.item = args.item;
+        this.count = args.count;
+    }
+
+    play(trigger) {
+        inventory[this.item] = this.count;
+        trigger.next();
+    }
+}
+
+Events.TakeItem = class {
+    constructor(args) {
+        this.item = args.item;
+        this.count = args.hasOwnProperty('count')? args.count:1;
+    }
+
+    play(trigger) {
+        inventory[this.item] -= this.count;
+        trigger.next();
+    }
+}
+
+Events.HasItem = class {
+    constructor(args) {
+        this.item = args.item;
+        this.count = args.hasOwnProperty('count')? args.count:1;
+    }
+
+    play(eventPlayer) {
+        if (inventory[this.item] >= this.count && this.args.hasOwnProperty('if')) {
+            eventPlayer.callback = null;
+            eventPlayer.forceFinish();
+            if (eventPlayer.trigger) {
+                eventPlayer.trigger.play(0, eventPlayers[this.args.if]);
+            } else {
+                eventPlayers[this.args.if].play();
+            }
+        } else if (this.args.hasOwnProperty('else')) {
+            eventPlayer.callback = null;
+            eventPlayer.forceFinish();
+            if (eventPlayer.trigger) {
+                eventPlayer.trigger.play(0, eventPlayers[this.args.else]);
+            } else {
+                eventPlayers[this.args.else].play();
+            }
+        }
+        eventPlayer.next();
+    }
+}
+
 Events.MapChange = class {
     constructor(args) {
         this.args = args;
@@ -518,7 +793,7 @@ Events.MapChange = class {
             this.bitmapText.redraw();
 
             this.width = this.bitmapText.width + 12;
-            this.height = this.bitmapText.height + 12;
+            this.height = this.bitmapText.pixelHeight + 12;
             this.halfWidth = Math.floor(this.width / 2);
             this.desty = Math.floor(height / 6);
 
@@ -732,6 +1007,33 @@ Events.Code = class {
     play(trigger) {
         eval(this.args.code);
         trigger.next();
+    }
+}
+
+Events.Conditional = class {
+    constructor(args) {
+        this.args = args;
+    }
+
+    play(eventPlayer) {
+        if (eval(this.args.code) && this.args.hasOwnProperty('if')) {
+            eventPlayer.callback = null;
+            eventPlayer.forceFinish();
+            if (eventPlayer.trigger) {
+                eventPlayer.trigger.play(0, eventPlayers[this.args.if]);
+            } else {
+                eventPlayers[this.args.if].play();
+            }
+        } else if (this.args.hasOwnProperty('else')) {
+            eventPlayer.callback = null;
+            eventPlayer.forceFinish();
+            if (eventPlayer.trigger) {
+                eventPlayer.trigger.play(0, eventPlayers[this.args.else]);
+            } else {
+                eventPlayers[this.args.else].play();
+            }
+        }
+        eventPlayer.next();
     }
 }
 

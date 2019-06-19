@@ -15,6 +15,21 @@ Array.prototype.remove = function(item) {
     this.splice(this.indexOf(item), 1);
 };
 
+String.prototype.interpolate = function() {
+    var str = '';
+    for (var i=0; i<this.length; i++) {
+        if (this.charCodeAt(i) == 167 && this.length > i + 1 && this.charCodeAt(i + 1) == 91) {
+            var match = /\[(.*)\]/g.exec(this.substr(i + 1).match(/.*?(?:$|§)/g)[0]);
+            str += eval(match[1]);
+            i += match[0].length;
+            continue;
+        } else {
+            str += this.charAt(i);
+        }
+    }
+    return str;
+}
+
 Math.clamp = function(x, min, max) {
     return Math.min(Math.max(x, min), max);
 }
@@ -44,7 +59,7 @@ Waves = {
 };
 
 class BitmapText extends PIXI.Graphics {
-    constructor(text, wrapWidth, tint=0xffffff, reveal=-1) {
+    constructor(text, wrapWidth=Number.INFINITY, tint=0xffffff, reveal=-1) {
         super();
         this.text = text;
         this.wrapWidth = wrapWidth;
@@ -55,16 +70,17 @@ class BitmapText extends PIXI.Graphics {
 
     set text(text) {
         this._text = text;
-        var x = 0, y = 0;
+        var x = 0, y = 0, lineHeight = 0;
         var ind = 0;
         for (var i=0; i<text.length; i++) {
             var charCode = text.charCodeAt(i);
             if (charCode == 10) {
                 y += charHeight;
+                lineHeight = 0;
                 x = 0;
                 ind++;
             } else if (charCode == 167 && this.text.length > i + 1 && this.text.charCodeAt(i + 1) == 123) {
-                var JSONString = this.text.substr(i + 1).match(/{.*?}/g)[0];
+                var JSONString = this.text.substr(i + 1).match(/.*?(?:$|§)/g)[0].match(/{.*}/g)[0];
                 i += JSONString.length;
                 continue;
             } else if (charCode < 128) {
@@ -75,17 +91,20 @@ class BitmapText extends PIXI.Graphics {
                     x = 0;
                     continue;
                 } else if (charCode != 32 && x + charWidth * 2 > this.wrapWidth) {
-                    x += charWidth;
                     y += charHeight;
                     x = 0;
                 }
                 x += charWidth;
+                lineHeight = Math.max(charHeight, lineHeight);
                 ind++;
             } else if (charCode >= 0xac00 && charCode <= 0xd7a3) {
                 x += fonts.kr[0].width;
+                lineHeight = Math.max(fonts.kr[0].height, lineHeight);
                 ind++;
             }
         }
+        this.pixelWidth = x;
+        this.pixelHeight = y + lineHeight;
         this.realLength = ind;
     }
 
@@ -111,7 +130,7 @@ class BitmapText extends PIXI.Graphics {
                 x = 0;
                 ind++;
             } else if (charCode == 167 && this.text.length > i + 1 && this.text.charCodeAt(i + 1) == 123) {
-                var JSONString = this.text.substr(i + 1).match(/{.*?}/g)[0];
+                var JSONString = this.text.substr(i + 1).match(/.*?(?:$|§)/g)[0].match(/{.*}/g)[0];
                 var JSONData = JSON.parse(JSONString);
                 
                 if (JSONData.shakeAmount != undefined) {

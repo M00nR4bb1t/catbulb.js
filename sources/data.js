@@ -17,10 +17,10 @@ var dataJSON = {
         
         "assets/maps/test.json",
         "assets/maps/livingRoom.json",
+        "assets/maps/bedroom.json",
 
         "assets/pictures/spaghetti.jpg",
-
-        "assets/se/twinkle.wav"
+        "assets/pictures/black.png"
     ],
 
     // GUI Settings
@@ -76,8 +76,21 @@ var dataJSON = {
             "name":"livingRoom",
             "file":"assets/maps/livingRoom.json",
             "tileset":"indoors"
+        },
+        {
+            "displayName":"Bedroom",
+            "name":"bedroom",
+            "file":"assets/maps/bedroom.json",
+            "tileset":"indoors"
         }
     ],
+
+    // Items
+    "items": {
+        "bedroomKey": {
+            "displayName": "Bedroom Key"
+        }
+    },
 
     // Events
     "events": {
@@ -85,13 +98,14 @@ var dataJSON = {
             {"type":"FadeInPicture", "arguments":{"path":"assets/pictures/spaghetti.jpg", "frameDuration":30}},
             {"type":"ShowChoices", "arguments":{"background":"default", "options":[{"text":"New Game", "events":"newGame"}, {"text":"Continue"}, {"text":"Shutdown"}]}}
         ],
+        '_keyPressedKeyX': [
+            {"type":"ShowInventory", "arguments":{"background":"default", "options":[{"text":"New Game"}, {"text":"Continue"}, {"text":"Shutdown"}, {"text":"New Game"}, {"text":"Continue"}, {"text":"Shutdown"}, {"text":"New Game"}, {"text":"Continue"}, {"text":"Shutdown"}, {"text":"New Game"}, {"text":"Continue"}, {"text":"Shutdown"}]}}
+        ],
         "newGame": [
+            {"type":"SetVariable", "arguments":{"variable":"sinkCounter", "value":0}},
+            {"type":"SetVariable", "arguments":{"variable":"lightsOff", "value":false}},
             {"type":"FadeOutPicture", "arguments":{"frameDuration":30}},
             {"type":"Delay", "arguments":{"frameDuration":60}},
-            {"type":"ShowText", "arguments":{"message":"§{\"shakeAmount\":2}Sine shake§{\"shakeAmount\":0} test\nAmount: §{\"shakeAmount\":1}1 §{\"shakeAmount\":2}2 §{\"shakeAmount\":3}3 §{\"shakeAmount\":4}4\n§{\"shakeAmount\":0}Speed: §{\"shakeAmount\":2, \"shakeSpeed\":0.005}0.005 §{\"shakeSpeed\":0.01}0.01 §{\"shakeSpeed\":0.02}0.02\n§{\"shakeSpeed\":0.01, \"shakeAmount\":0}Increment: §{\"shakeAmount\":2, \"shakeIncrement\":0.1}0.1 §{\"shakeIncrement\":0.2}0.2 §{\"shakeIncrement\":0.3}0.3 §{\"shakeIncrement\":0.4}0.4", "y":0.5}},
-            {"type":"ShowText", "arguments":{"message":"§{\"shakeAmount\":2, \"shakeType\":\"saw\"}Saw shake§{\"shakeAmount\":0} test\nAmount: §{\"shakeAmount\":1}1 §{\"shakeAmount\":2}2 §{\"shakeAmount\":3}3 §{\"shakeAmount\":4}4\n§{\"shakeAmount\":0}Speed: §{\"shakeAmount\":2, \"shakeSpeed\":0.005}0.005 §{\"shakeSpeed\":0.01}0.01 §{\"shakeSpeed\":0.02}0.02\n§{\"shakeSpeed\":0.01, \"shakeAmount\":0}Increment: §{\"shakeAmount\":2, \"shakeIncrement\":0.1}0.1 §{\"shakeIncrement\":0.2}0.2 §{\"shakeIncrement\":0.3}0.3 §{\"shakeIncrement\":0.4}0.4", "y":0.5}},
-            {"type":"ShowText", "arguments":{"message":"§{\"shakeAmount\":2, \"shakeType\":\"triangle\"}Triangle shake§{\"shakeAmount\":0} test\nAmount: §{\"shakeAmount\":1}1 §{\"shakeAmount\":2}2 §{\"shakeAmount\":3}3 §{\"shakeAmount\":4}4\n§{\"shakeAmount\":0}Speed: §{\"shakeAmount\":2, \"shakeSpeed\":0.005}0.005 §{\"shakeSpeed\":0.01}0.01 §{\"shakeSpeed\":0.02}0.02\n§{\"shakeSpeed\":0.01, \"shakeAmount\":0}Increment: §{\"shakeAmount\":2, \"shakeIncrement\":0.1}0.1 §{\"shakeIncrement\":0.2}0.2 §{\"shakeIncrement\":0.3}0.3 §{\"shakeIncrement\":0.4}0.4", "y":0.5}},
-            {"type":"Delay", "arguments":{"frameDuration":120}},
             {"type":"MapChange", "arguments":{"map":"kitchen", "x":224, "y":160}}
         ],
 
@@ -103,6 +117,10 @@ var dataJSON = {
             {"type":"MapChange", "arguments":{"map":"livingRoom", "x":367}},
             {"type":"AddFilter", "arguments":{"container":"viewport", "filter":"grayscale"}},
             {"type":"MovePlayer", "arguments":{"x":342}},
+            {"type":"Conditional", "arguments":{"code":"!variables.lightsOff", "if":"lightsOff"}}
+        ],
+        "lightsOff": [
+            {"type":"SetVariable", "arguments":{"variable":"lightsOff", "value":true}},
             {"type":"ShowText", "arguments":{"background":"default", "name":"Luke", "message":"...the lights turned off."}}
         ],
         "doorToKitchen": [
@@ -114,9 +132,27 @@ var dataJSON = {
             {"type":"MovePlayer", "arguments":{"x":138}}
         ],
         "sink": [
+            {"type":"Conditional", "arguments":{"code":"variables.sinkCounter == 0", "if":"sinkA", "else":"sinkB"}}
+        ],
+        "sinkA": [
+            {"type":"SetVariable", "arguments":{"variable":"sinkCounter", "value":1}},
             {"type":"ShowText", "arguments":{"background":"default", "message":"A kitchen sink."}},
             {"type":"Delay", "arguments":{"frameDuration":60}},
             {"type":"ShowText", "arguments":{"background":"default", "message":"...the faucet doesn't seem to work."}}
+        ],
+        "sinkB": [
+            {"type":"Conditional", "arguments":{"code":"variables.sinkCounter == 1", "if":"sinkBA", "else":"sinkBB"}}
+        ],
+        "sinkBA": [
+            {"type":"SetVariable", "arguments":{"variable":"sinkCounter", "value":2}},
+            {"type":"ShowText", "arguments":{"background":"default", "message":"A kitchen sink."}},
+            {"type":"Delay", "arguments":{"frameDuration":60}},
+            {"type":"ShowText", "arguments":{"background":"default", "message":"...upon closer inspection, you see a small key stuck inside the drain."}},
+            {"type":"GiveItem", "arguments":{"item":"bedroomKey"}},
+            {"type":"ShowText", "arguments":{"background":"default", "message":"You got a BEDROOM KEY!", "y":0.5}}
+        ],
+        "sinkBB": [
+            {"type":"ShowText", "arguments":{"background":"default", "message":"A kitchen sink."}}
         ],
         "stove": [
             {"type":"ShowText", "arguments":{"background":"default", "message":"A gas stove."}},
@@ -132,22 +168,34 @@ var dataJSON = {
             {"type":"ShowText", "arguments":{"background":"default", "name":"Luke", "message":"§{\"shakeAmount\":3}...Woah!§{\"shakeAmount\":0} I almost fell down through the hole!"}}
         ],
         "fireplace": [
-            {"type":"ShowText", "arguments":{"background":"default", "name":"Friendly Neighbourhood Fireplace", "message":"§{\"shakeAmount\":2}Hi! I'm your friendly neighbourhood talking fireplace!"}},
-            {"type":"ShowText", "arguments":{"background":"default", "name":"Friendly Neighbourhood Fireplace", "message":"§{\"shakeAmount\":2}I'm here to demonstrate Event.Code to you."}},
-            {"type":"Code", "arguments":{"code":"console.log('A warm hello from your friendly neighbourhood talking fireplace!');"}},
-            {"type":"Delay", "arguments":{"frameDuration":90}},
-            {"type":"ShowText", "arguments":{"background":"default", "name":"Friendly Neighbourhood Fireplace", "message":"§{\"shakeAmount\":2}Check the console!"}},
-            {"type":"Delay", "arguments":{"frameDuration":90}},
-            {"type":"ShowText", "arguments":{"background":"default", "name":"Friendly Neighbourhood Fireplace", "message":"§{\"shakeAmount\":2}Oh, I can also play songs for you!"}},
-            {"type":"Delay", "arguments":{"frameDuration":90}},
-            {"type":"SoundEffect", "arguments":{"path":"assets/se/twinkle.wav", "async":true}},
-            {"type":"Delay", "arguments":{"frameDuration":153}},
-            {"type":"StopSound"},
-            {"type":"ShowText", "arguments":{"background":"default", "name":"Friendly Neighbourhood Fireplace", "message":"§{\"shakeAmount\":2}Actually, you know what, I don't really like that song. Forget it."}}
+            {"type":"ShowText", "arguments":{"background":"default", "message":"A wood-burning fireplace."}},
+            {"type":"ShowText", "arguments":{"background":"default", "message":"The sound of wood crackling makes you feel right at home."}}
         ],
         "sofa": [
             {"type":"ShowText", "arguments":{"background":"default", "message":"A couch."}},
             {"type":"ShowText", "arguments":{"background":"default", "message":"Looks cozy."}}
+        ],
+        "doorToBedroom": [
+            {"type":"ShowText", "arguments":{"background":"default", "message":"The door leading to the bedroom."}},
+            {"type":"Delay", "arguments":{"frameDuration":60}},
+            {"type":"ShowText", "arguments":{"background":"default", "name":"Luke", "message":"It's locked. I think I need the key to get in."}},
+            {"type":"ShowInventory", "arguments":{"background":"default", "events":{"bedroomKey":"goToBedroom", "_default":"bedroomNoKey"}}}
+        ],
+        "goToBedroom": [
+            {"type":"MapChange", "arguments":{"map":"bedroom", "x":367, "y":176}},
+            {"type":"MovePlayer", "arguments":{"x":342}}
+        ],
+        "bedroomNoKey": [
+            {"type":"ShowText", "arguments":{"background":"default", "name":"Luke", "message":"Hmm... Where did I leave the key again?"}}
+        ],
+        "bed": [
+            {"type":"FadeInPicture", "arguments":{"path":"assets/pictures/black.png", "frameDuration":180}},
+            {"type":"Delay", "arguments":{"frameDuration":60}},
+            {"type":"ShowText", "arguments":{"message":"Slowly but surely, you feel your eyelids droop...", "y":0.5}},
+            {"type":"Delay", "arguments":{"frameDuration":60}},
+            {"type":"ShowText", "arguments":{"message":"END 1 - Sleep", "y":0.5}},
+            {"type":"Delay", "arguments":{"frameDuration":60}},
+            {"type":"Code", "arguments":{"code":"location.reload();"}}
         ]
     }
 }

@@ -38,7 +38,7 @@ var map, solids = [], eventPlayers = [], triggers = [];
 
 var resources, variables = {};
 var needsUpdate = [];
-var player;
+var player, inventory = {};
 
 var viewport = new PIXI.Container();
 var camera = new Camera(viewport);
@@ -110,8 +110,12 @@ function init(loader, _resources) {
         }
         maps[dataJSON.maps[i].name] = new TileMap(dataJSON.maps[i].hasOwnProperty('displayName')? dataJSON.maps[i].displayName:dataJSON.maps[i].name, tileLayers, mapJSON.width, mapJSON.height, tilesets[dataJSON.maps[i].tileset], _solids, _triggers);
     }
+
+    for (var k in dataJSON.items) {
+        inventory[k] = 0;
+    }
     
-    eventPlayers._gameStart.play();
+    if (eventPlayers.hasOwnProperty('_gameStart')) eventPlayers['_gameStart'].play();
 
     document.addEventListener('keydown', e => onKeyDown(e));
     document.addEventListener('keyup', e => onKeyUp(e));
@@ -146,11 +150,19 @@ function zSort(a, b) {
 function onKeyDown(e) {
     if (!keyDown[e.code]) keyPressed[e.code] = true;
     keyDown[e.code] = true;
+    if (player && !player.paralyzed && eventPlayers.hasOwnProperty('_keyPressed' + e.code)) {
+        player.paralyzed = true;
+        eventPlayers['_keyPressed' + e.code].play(0, null, () => {player.paralyzed = false;});
+    }
 }
 
 function onKeyUp(e) {
     keyReleased[e.code] = true;
     keyDown[e.code] = false;
+    if (player && !player.paralyzed && eventPlayers.hasOwnProperty('_keyReleased' + e.code)) {
+        player.paralyzed = true;
+        eventPlayers['_keyReleased' + e.code].play(0, null, () => {player.paralyzed = false;});
+    }
 }
 
 function onGamepadConnected(e) {
@@ -184,8 +196,13 @@ function updateGamepadInputs() {
     for (var i=0; i<_gamepadButtonDown.length; i++) {
         if (_gamepadButtonDown[i] && !gamepadButtonDown[i]) {
             gamepadButtonPressed[i] = true;
+            if (player && !player.paralyzed && eventPlayers.hasOwnProperty('_gamepadButtonPressed' + e.code)) {
+                player.paralyzed = true;
+                eventPlayers['_gamepadButtonPressed' + e.code].play(0, null, () => {player.paralyzed = false;});
+            }
         } else if (gamepadButtonDown[i] && !_gamepadButtonDown[i]) {
             gamepadButtonReleased[i] = true;
+            if (player && !player.paralyzed && eventPlayers.hasOwnProperty('_gamepadButtonReleased' + e.code)) eventPlayers['_gamepadButtonReleased' + e.code].play();
         }
     }
     gamepadAxes = gamepads[0].axes;
